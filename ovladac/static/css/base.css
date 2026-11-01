@@ -40,6 +40,9 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Atribut hidden musí vyhrát i nad třídami s vlastním display (např. .badge). */
+[hidden] { display: none !important; }
+
 html { font-size: var(--font-size); }
 
 body {

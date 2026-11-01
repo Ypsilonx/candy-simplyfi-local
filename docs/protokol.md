@@ -5,7 +5,7 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
@@ -57,7 +57,7 @@ Appka čte stav lokálně á 15 s.
 | `r1` | pozice programu na panelu (1–5) | ✅ [P4] 🔍 |
 | `RemTime` | zbývající minuty; mimo běh jmenovitá délka | ✅ [P1] |
 | `StartStop` | aktivní program (zůstává 1 i po konci, dokud nepřijde reset) | ✅ 🔍 |
-| `DelayStart` | zbývající minuty do odloženého startu | ✅ [P9] |
+| `DelayStart` | zbývající minuty do odloženého startu; mimo čekání drží starou hodnotu (start ji vynuluje) | ✅ [P9, P11] |
 | `TreinUno`, `Eco`, `MetaCarico`, `ExtraDry`, `OpenDoorOpt` | volby 3v1, Eco, ½ náplň, ExtraDry, auto-otevření | 🔍 |
 | `OpenDoor` | dvířka otevřená; během běhu → pauza (`StatoDWash=4`), po zavření ~3 s pokračuje | ✅ [P3, P9] |
 | `MissSalt`, `MissRinse` | chybí sůl / leštidlo (jen příznak, žádná hladina) | 🔍 |
