@@ -8,6 +8,13 @@
 | 10:40:30 | `DelayStart=0&ExtraDry=0&OpenDoorOpt=0&TreinUno=0&Program=P12&MetaCarico=0&OpzProg=0&w1=4&StartStop=1&Eco=0` | `{"response":"SUCCESS"}` (šifrovaně) | `StartStop` 0→1, `StatoDWash` 2→3, `r2` 0→2 |
 | 10:40:43 | `Reset=1` | `{"response":"SUCCESS"}` | `StartStop` 1→0, `StatoDWash` 3→2, `r5` 0→1 |
 
+## Pauza (2× opakováno, 10:44 a 10:48)
+
+Start P12 → po 25 s `Pa=1` → po 25 s `Pa=0` → po 25 s `Reset=1`. Odpověď vždy `SUCCESS`, ale `Pa=1/0`
+nezměnily stav a myčka podle uživatele **běžela celou dobu stejně**. ⇒ ❌ pauza `Pa` naše myčka
+nepodporuje (v appce jen podřada hnautilus). Start i stop fungovaly pokaždé.
+`r5`: start 1→0, stop 0→1 – spíš „neběží/připraveno“ než vypouštění.
+
 ## Závěry
 
 - ✅ Lokální zápis funguje: formát řady nautilus (`Program=P<cycleId>&w1=<pozice>`) je pro naši myčku správný.

@@ -14,8 +14,8 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
 - Sken sítě: `python -m candy_netscan`
 - Sledování stavu: `python candy_netscan/candy_watch.py --log data/watch/<datum>_<popis>.jsonl`
   (IP a klíč z `.env`, viz `.env.example`)
-- Příkaz myčce: `python -m candy_netscan.send start P12` (dry-run), ostře s `--send`; dále `stop`, `pause`,
-  `resume`, `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
+- Příkaz myčce: `python -m candy_netscan.send start P12` (dry-run), ostře s `--send`; dále `stop`,
+  `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
 
 ## Mapa projektu
 

@@ -51,7 +51,8 @@ def start_params(program: str, w1: int, delay: int, mask: int) -> str:
             f"&OpzProg={mask}&w1={w1}&StartStop=1&Eco={flag(OPT_ECO)}")
 
 
-SIMPLE_COMMANDS = {"stop": "Reset=1", "pause": "Pa=1", "resume": "Pa=0"}
+# Pause (Pa=1/0) is answered with SUCCESS but ignored by our model (P8).
+SIMPLE_COMMANDS = {"stop": "Reset=1"}
 
 
 def build_params(args: argparse.Namespace) -> str:
@@ -80,7 +81,7 @@ def send(ip: str, payload: str, timeout: float) -> str:
 
 
 def parse_args(argv) -> argparse.Namespace:
-    """Define the CLI: start/stop/pause/resume/raw + common flags."""
+    """Define the CLI: start/stop/raw + common flags."""
     # Common flags live in a parent parser so they work after the subcommand.
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--send", action="store_true",
