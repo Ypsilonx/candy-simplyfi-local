@@ -92,7 +92,7 @@ async def get_status(request: Request) -> dict:
     """Poslední známý stav myčky z cache (myčku nečte); ``chyba`` = poslední čtení selhalo."""
     a = _appliance(request)
     return {
-        "stav": asdict(a.stav) if a.stav else None,
+        "stav": {**asdict(a.stav), "cisteni": a.cleaning} if a.stav else None,
         "raw": a.raw,
         "aktualizovano": a.updated.isoformat(timespec="seconds") if a.updated else None,
         "chyba": a.error,

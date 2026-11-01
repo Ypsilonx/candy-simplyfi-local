@@ -72,7 +72,6 @@ class CycleTracker:
         self._phase: str = ""
         self._phase_since: datetime | None = None
         self._phases: dict[str, int] = {}
-        self._cleaning = False
 
     def update(self, stav: Stav, ts: datetime) -> Event | None:
         """Zpracuje další čtení stavu (``ts`` s časovou zónou), vrátí událost nebo None."""
@@ -82,11 +81,9 @@ class CycleTracker:
                 return None
             self._start, self._first = ts, stav
             self._phase, self._phase_since, self._phases = stav.faze, ts, {}
-            self._cleaning = stav.cisteni
             return Event("start")
 
         if running:
-            self._cleaning = self._cleaning or stav.cisteni
             if stav.faze and stav.faze != self._phase:
                 self._close_phase(ts)
                 self._phase, self._phase_since = stav.faze, ts
@@ -102,7 +99,6 @@ class CycleTracker:
             zbyva_na_startu=self._first.zbyva_min,
             vysledek="dokonceno" if stav.stav == "konec" else "zruseno",
             faze=self._phases,
-            cisteni=self._cleaning,
         )
         self._start = self._first = None
         return Event("konec" if cycle.vysledek == "dokonceno" else "zruseno", cycle)

@@ -9,6 +9,7 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Hotovo
 
+- ✅ P12: **čisticí cyklus naostro** – P2 + `w3=H_2` z UI, po dokončení se samo zapsalo odvápnění.
 - ✅ P11: **ovladač naostro z webového UI** – start P12, stop, zápis cyklu do historie (větev `feature/ovladac`).
 - ✅ P8: **lokální zápis funguje** – start P12 a `Reset=1` přes `candy_netscan/send.py`.
 - ✅ P9: dvířka během běhu = pauza (`StatoDWash=4`) a samo pokračuje; odložený start (příkaz v půlhodinách,
@@ -30,7 +31,7 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
    Větev `feature/ovladac`: ✅ T1 (uv projekt + `candy_netscan/client.py`), ✅ T2 (model stavu + katalog programů), ✅ T3 (historie cyklů + údržba), ✅ T4 (FastAPI server, `DRY_RUN`), ✅ T5 (webové UI), ✅ revize větve (10 nálezů opraveno), ✅ T6a ostrý test z UI (P11).
    ✅ T6b soubory pro Docker (`docs/nasazeni.md`, zatím nesestaveno – na Windows PC Docker není).
    Provoz zatím na Windows PC (`uv run uvicorn … --host 0.0.0.0`).
-   ✅ Čisticí cyklus z UI (P12, dry-run). Další: ostrý test čištění (ověřit `w3` → `r9=H_2`), merge do `main`. Potom „Statistiky a údržba v2“
+   ✅ Čisticí cyklus z UI včetně ostrého testu (P12). Další: merge do `main`. Potom „Statistiky a údržba v2“
    (počáteční stav údržby, učení délek z historie, přehled statistik).
 2. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 

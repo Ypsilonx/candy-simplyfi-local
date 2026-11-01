@@ -62,24 +62,26 @@ def _run_cycle(a, n):
         asyncio.run(a.refresh())
 
 
-def test_finished_cleaning_marks_descaling_via_r9(make):
+def test_r9_alone_is_not_cleaning(make):
+    """r9=H_2 zůstává po čištění i dál – bez tlačítka ovladače je P2 běžné mytí."""
     factory, idle, running = make
     done = {**running, "StatoDWash": "5", "r2": "5"}
-    a = factory([idle, {**running, "r9": "H_2"}, done])
+    a = factory([idle, {**running, "r9": "H_2"}, {**done, "r9": "H_2"}])
     _run_cycle(a, 3)
-    (cycle,) = a.history.list()
-    assert cycle.cisteni and cycle.vysledek == "dokonceno"
-    assert a.history.maintenance(2)["odvapneni_posledni"] == cycle.konec
+    assert not a.history.list()[0].cisteni
+    assert a.history.maintenance(2)["odvapneni_posledni"] is None
 
 
-def test_cleaning_started_from_app_without_r9(make):
+def test_cleaning_started_from_button(make):
     factory, idle, running = make
     done = {**running, "StatoDWash": "5", "r2": "5"}
     a = factory([idle, running, done])
     _run_cycle(a, 2)
-    a.cleaning_started()  # pojistka: ovladač ví, že čištění spustil
+    a.cleaning_started()
+    assert a.cleaning
     _run_cycle(a, 1)
     assert a.history.list()[0].cisteni
+    assert not a.cleaning
     assert a.history.maintenance(2)["odvapneni_zbyva"] == 100
 
 

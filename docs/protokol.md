@@ -64,7 +64,7 @@ Appka čte stav lokálně á 15 s.
 | `CodiceErrore` | `E<n>`, n > 0 = chyba (číselník v DB appky) | 🔍 |
 | `CheckUp` | kontrola: 0 –, 1 probíhá, 2 hotovo, 3 chyba | 🔍 |
 | `r6` zvuk (`BM`) · `r7` tvrdost vody (`HL`, u nás 2) · `r8` poslední cyklus (`LC`) | nastavení uložená v myčce, přežijí restart | ✅ [P10] |
-| `r9` | `H_<cycleId>` = autoclean, jinak `NULL` | 🔍 |
+| `r9` | ozvěna `w3` z posledního startu: `H_<cycleId>` = autoclean (u nás `H_2 \` s neescapovaným lomítkem – rozbije striktní JSON), jinak `NULL`. **Drží se i po konci cyklu** – appka ho bere jen při běhu | ✅ [P12] |
 | `r15` | > 0 = odložení v půlhodinách + checkup | 🔍 |
 | `r5` | 🟡 1 = neběží/připraveno: 1→0 při startu, 0→1 po stopu (v P1 1→0 až v 16. min – log začal po startu) | [P1, P8] |
 | `r3`, `r4`, `Reset` | nepojmenováno | ❓ |
@@ -87,7 +87,7 @@ Appka čte stav lokálně á 15 s.
 - **Filtr**: upozornění každých **100 cyklů** (součet `s1`–`s21` ze statistik).
 - **Odvápnění / autoclean**: po 110/105/100/95/90/85 cyklech podle tvrdosti `r7` (u nás 100).
 - **Čisticí cyklus** = u nás **P2 Intenzivní** s prázdnou myčkou a čističem; appka přidá `w3=H_2`
-  (pak `r9=H_2`) – `w3` neověřeno. 🔍 [P12]
+  → myčka ho přijme a během čištění hlásí `r9=H_2`. ✅ [P12] Ovladač čištění pozná jen podle svého tlačítka, `r9` nepoužívá.
 - „Naposledy vyčištěno“ a tablety si appka pamatuje jen v telefonu.
 
 ## Programy [P4, P5]

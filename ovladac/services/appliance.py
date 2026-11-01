@@ -54,7 +54,8 @@ class Appliance:
         self.updated: datetime | None = None
         self.error: str | None = None
         self._tracker = CycleTracker()
-        # Čištění spuštěné z ovladače – pojistka, kdyby myčka neukázala r9=H_ (neověřeno).
+        # Čištění = jen cyklus spuštěný tlačítkem v ovladači. r9=H_ z myčky se nepoužívá:
+        # drží se i po konci cyklu (P12), běžné mytí by se pak mohlo počítat jako odvápnění.
         self._cleaning_started = False
         self._lock = asyncio.Lock()
 
@@ -75,13 +76,17 @@ class Appliance:
 
     def _finish_cycle(self, cycle: Cycle) -> None:
         """Zapíše cyklus; dokončené čištění zároveň zapíše jako odvápnění."""
-        if self._cleaning_started and cycle.program == AUTOCLEAN_PROGRAM:
-            cycle.cisteni = True
+        cycle.cisteni = self._cleaning_started and cycle.program == AUTOCLEAN_PROGRAM
         self._cleaning_started = False
         self.history.append(cycle)
         if cycle.cisteni and cycle.vysledek == "dokonceno":
             self.history.mark("odvapneni", datetime.fromisoformat(cycle.konec))
             log.info("čištění dokončeno – zapsáno odvápnění")
+
+    @property
+    def cleaning(self) -> bool:
+        """Právě běží čisticí cyklus spuštěný z ovladače."""
+        return self._cleaning_started and bool(self.stav and self.stav.aktivni)
 
     def cleaning_started(self) -> None:
         """Ovladač právě spustil čisticí cyklus a myčka běží – jeho konec se zapíše jako odvápnění."""

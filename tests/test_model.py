@@ -47,6 +47,3 @@ def test_pause_while_waiting_for_delayed_start(p2_log):
     assert (s.stav, s.faze, s.aktivni) == ("odlozeno", "", True)
 
 
-def test_cleaning_recognised_from_r9(p2_log):
-    assert interpret({**p2_log[0], "r9": "H_2"}).cisteni
-    assert not interpret(p2_log[0]).cisteni
