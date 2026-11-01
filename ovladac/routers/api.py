@@ -138,6 +138,18 @@ async def start(body: StartRequest, request: Request) -> dict:
             "odhad_konce": end.isoformat(timespec="minutes")}
 
 
+@router.post("/cisteni")
+async def start_cleaning(request: Request) -> dict:
+    """Spustí čisticí cyklus (odvápnění) s prázdnou myčkou; po dokončení se sám zapíše do údržby."""
+    a = _appliance(request)
+    result = await _run(a, programs.autoclean_params(), require_idle=True)
+    if result["odeslano"]:
+        a.cleaning_started()
+    length = programs.get_program(programs.AUTOCLEAN_PROGRAM).delka
+    end = a.settings.now() + timedelta(minutes=length)
+    return {**result, "odhad_konce": end.isoformat(timespec="minutes")}
+
+
 @router.post("/stop")
 async def stop(request: Request) -> dict:
     """Zastaví program nebo zruší odložený start (``Reset=1``)."""

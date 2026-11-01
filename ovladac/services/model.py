@@ -58,6 +58,7 @@ class Stav:
     odlozeni_min: int
     volby: list[str]
     aktivni: bool       # stav je v ACTIVE (myje, pauza, čeká na start)
+    cisteni: bool       # běží čisticí cyklus (r9 = H_<cycleId>, jako appka)
     dalkove_ovladani: bool
     dvirka_otevrena: bool
     nastaveni: Nastaveni
@@ -105,6 +106,7 @@ def interpret(raw: dict[str, str]) -> Stav:
         odlozeni_min=delay if code == "odlozeno" else 0,
         volby=volby,
         aktivni=code in ACTIVE,
+        cisteni="H_" in raw.get("r9", ""),
         dalkove_ovladani=raw.get("StatoWiFi") == "1",
         dvirka_otevrena=raw.get("OpenDoor") == "1",
         nastaveni=Nastaveni(

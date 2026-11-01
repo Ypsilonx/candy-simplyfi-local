@@ -28,6 +28,9 @@ HIDDEN_OPTIONS = {"opendoor"}
 
 MAX_DELAY_HALF_HOURS = 48
 
+# Čisticí cyklus („Automatické čištění“ appky): u naší řady P2 Intenzivní, viz pokus P12.
+AUTOCLEAN_PROGRAM = "P2"
+
 
 @dataclass(frozen=True)
 class Program:
@@ -141,3 +144,12 @@ def start_params(code: str, opts: set[str], delay: int = 0) -> str:
     if not 0 <= delay <= MAX_DELAY_HALF_HOURS:
         raise ValueError("Odložení startu musí být 0–48 půlhodin")
     return send.start_params(program.kod, program.w1, delay, options_mask(opts))
+
+
+def autoclean_params() -> str:
+    """Příkaz čisticího cyklu jako z appky: start P2 bez voleb + ``w3=H_<cycleId>``.
+
+    Appka posílá ještě ``w2`` (název pro displej) – běžný start funguje i bez něj.
+    Myčka pak během čištění hlásí ``r9=H_<cycleId>``.
+    """
+    return start_params(AUTOCLEAN_PROGRAM, set()) + f"&w3=H_{AUTOCLEAN_PROGRAM[1:]}"

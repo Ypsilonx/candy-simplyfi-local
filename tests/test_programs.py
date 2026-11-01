@@ -6,8 +6,9 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from ovladac.routers.api import _next_occurrence
-from ovladac.services.programs import (allowed_options, delay_for_end,
-                                       start_params, validate_options)
+from ovladac.services.programs import (allowed_options, autoclean_params,
+                                       delay_for_end, start_params,
+                                       validate_options)
 
 
 def test_allowed_options_from_mask():
@@ -68,3 +69,9 @@ def test_delay_for_end_across_dst_change():
     half_hours, end = delay_for_end(now, konec, 130)
     assert half_hours == 14  # skutečně uběhne 9 h, ne 8 h
     assert (end.day, end.hour, end.minute) == (25, 6, 10)
+
+
+def test_autoclean_params_like_app():
+    assert autoclean_params() == (
+        "DelayStart=0&ExtraDry=0&OpenDoorOpt=0&TreinUno=0&Program=P2"
+        "&MetaCarico=0&OpzProg=0&w1=1&StartStop=1&Eco=0&w3=H_2")

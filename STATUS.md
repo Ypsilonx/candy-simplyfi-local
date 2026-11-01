@@ -28,7 +28,9 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 1. Ovladač myčky – návrh `docs/specs/ovladac-mycky.md` a plán `docs/plans/ovladac-mycky.md` schváleny.
    Větev `feature/ovladac`: ✅ T1 (uv projekt + `candy_netscan/client.py`), ✅ T2 (model stavu + katalog programů), ✅ T3 (historie cyklů + údržba), ✅ T4 (FastAPI server, `DRY_RUN`), ✅ T5 (webové UI), ✅ revize větve (10 nálezů opraveno), ✅ T6a ostrý test z UI (P11).
-   Další: **T6b Docker** na Linux PC, pak merge do `main`. Potom „Statistiky a údržba v2“
+   ✅ T6b soubory pro Docker (`docs/nasazeni.md`, zatím nesestaveno – na Windows PC Docker není).
+   Provoz zatím na Windows PC (`uv run uvicorn … --host 0.0.0.0`).
+   ✅ Čisticí cyklus z UI (P12, dry-run). Další: ostrý test čištění (ověřit `w3` → `r9=H_2`), merge do `main`. Potom „Statistiky a údržba v2“
    (počáteční stav údržby, učení délek z historie, přehled statistik).
 2. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 

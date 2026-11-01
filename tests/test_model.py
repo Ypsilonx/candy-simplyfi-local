@@ -45,3 +45,8 @@ def test_pause_while_waiting_for_delayed_start(p2_log):
     # Otevřená dvířka během čekání (4 + DelayStart > 0) je pořád čekání, ne mytí.
     s = interpret({**p2_log[0], "StatoDWash": "4", "DelayStart": "60"})
     assert (s.stav, s.faze, s.aktivni) == ("odlozeno", "", True)
+
+
+def test_cleaning_recognised_from_r9(p2_log):
+    assert interpret({**p2_log[0], "r9": "H_2"}).cisteni
+    assert not interpret(p2_log[0]).cisteni

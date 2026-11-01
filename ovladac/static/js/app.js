@@ -71,7 +71,8 @@ function renderStatus(data) {
   remote.className = s.dalkove_ovladani ? "badge badge-ok" : "badge badge-warn";
 
   const running = s.aktivni;
-  $("st-program").textContent = s.program_nazev + (s.volby.length ? ` · ${optionNames(s.program, s.volby)}` : "");
+  $("st-program").textContent = s.cisteni ? "Čištění myčky (Intenzivní)"
+    : s.program_nazev + (s.volby.length ? ` · ${optionNames(s.program, s.volby)}` : "");
   $("st-phase").textContent = s.faze + (s.dvirka_otevrena ? " · dvířka otevřená" : "");
 
   const program = state.programs.find((p) => p.kod === s.program);
@@ -99,6 +100,7 @@ function renderStatus(data) {
 
   $("btn-stop").hidden = !running;
   $("btn-start").disabled = running;
+  $("btn-clean").disabled = running;
   renderSettings(s.nastaveni);
 }
 
@@ -281,7 +283,8 @@ function renderMaintenance(m) {
   $("history").replaceChildren(...m.historie.map((c) => {
     const tr = el("tr");
     const program = state.programs.find((p) => p.kod === c.program);
-    tr.append(el("td", formatTime(c.start, true)), el("td", program ? program.nazev : c.program),
+    const name = program ? program.nazev : c.program;
+    tr.append(el("td", formatTime(c.start, true)), el("td", c.cisteni ? `${name} · čištění` : name),
       el("td", optionNames(c.program, c.volby) || "–"), el("td", formatMinutes(c.delka_min)),
       el("td", c.vysledek === "dokonceno" ? "dokončeno" : "zrušeno"));
     return tr;
@@ -308,6 +311,27 @@ async function markMaintenance(kind) {
   }
 }
 
+/** Spustí čisticí cyklus po potvrzení postupu. */
+async function startCleaning() {
+  const steps = [
+    "Spustit čisticí cyklus (Intenzivní 75 °C)?",
+    "",
+    "1. Myčka je prázdná a filtr vyčištěný.",
+    "2. Čistič je vložený podle návodu na obalu (lahvička dnem vzhůru).",
+    "3. Žádná tableta.",
+    "",
+    "Po dokončení se odvápnění zapíše samo.",
+  ].join("\n");
+  if (!confirm(steps)) return;
+  try {
+    const res = await apiPost("/cisteni");
+    showResult($("maint-result"), `${describeCommand(res)} · odhad konce ${formatTime(res.odhad_konce)}`);
+    loadStatus();
+  } catch (err) {
+    showResult($("maint-result"), err.message, true);
+  }
+}
+
 /* ---------- start stránky ---------- */
 
 /** Načte katalog, napojí ovládání a spustí pravidelné obnovování. */
@@ -325,6 +349,7 @@ async function init() {
 
   $("btn-start").addEventListener("click", startProgram);
   $("btn-stop").addEventListener("click", stopProgram);
+  $("btn-clean").addEventListener("click", startCleaning);
   $("end-time").addEventListener("input", updatePreview);
   for (const r of document.querySelectorAll("input[name=timing]")) r.addEventListener("change", updatePreview);
   $("set-sound").addEventListener("change", (e) => sendSetting({ zvuk: e.target.checked }));

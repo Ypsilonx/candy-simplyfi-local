@@ -61,6 +61,12 @@
           <span class="muted small" id="m-descale-last"></span></div>
         <button class="btn" data-mark="odvapneni">Odvápněno</button>
       </div>
+      <div class="maint-row">
+        <div><strong>Čisticí cyklus</strong> <span class="muted small">Intenzivní 75 °C s prázdnou myčkou
+          a čističem; po dokončení se odvápnění zapíše samo.</span></div>
+        <button class="btn" id="btn-clean">Spustit čištění</button>
+      </div>
+      <p id="maint-result" class="result" hidden></p>
       <h3>Historie</h3>
       <div class="table-wrap">
         <table class="history">
@@ -92,6 +98,6 @@
 
   <!-- Pořadí je závazné: api.js definuje API_BASE_URL a funkce, které app.js používá. -->
   <script src="js/api.js?v=1"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/app.js?v=5"></script>
 </body>
 </html>

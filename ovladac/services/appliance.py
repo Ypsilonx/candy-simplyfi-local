@@ -16,8 +16,9 @@ from candy_netscan.candy_watch import diff
 from candy_netscan.client import read_status, send_params
 
 from ..config import Settings
-from .history import CycleTracker, History
+from .history import Cycle, CycleTracker, History
 from .model import Stav, interpret
+from .programs import AUTOCLEAN_PROGRAM
 
 log = logging.getLogger(__name__)
 
@@ -53,6 +54,8 @@ class Appliance:
         self.updated: datetime | None = None
         self.error: str | None = None
         self._tracker = CycleTracker()
+        # Čištění spuštěné z ovladače – pojistka, kdyby myčka neukázala r9=H_ (neověřeno).
+        self._cleaning_started = False
         self._lock = asyncio.Lock()
 
     async def _read(self) -> dict[str, str]:
@@ -68,7 +71,22 @@ class Appliance:
         if event:
             log.info("cyklus: %s %s", event.kind, event.cycle or self.stav.program)
             if event.cycle:
-                self.history.append(event.cycle)
+                self._finish_cycle(event.cycle)
+
+    def _finish_cycle(self, cycle: Cycle) -> None:
+        """Zapíše cyklus; dokončené čištění zároveň zapíše jako odvápnění."""
+        if self._cleaning_started and cycle.program == AUTOCLEAN_PROGRAM:
+            cycle.cisteni = True
+        self._cleaning_started = False
+        self.history.append(cycle)
+        if cycle.cisteni and cycle.vysledek == "dokonceno":
+            self.history.mark("odvapneni", datetime.fromisoformat(cycle.konec))
+            log.info("čištění dokončeno – zapsáno odvápnění")
+
+    def cleaning_started(self) -> None:
+        """Ovladač právě spustil čisticí cyklus a myčka běží – jeho konec se zapíše jako odvápnění."""
+        if self.stav and self.stav.aktivni and self.stav.program == AUTOCLEAN_PROGRAM:
+            self._cleaning_started = True
 
     async def refresh(self) -> None:
         """Načte stav; chybu jen zaznamená (poslední stav zůstává, ``error`` ji popíše).
