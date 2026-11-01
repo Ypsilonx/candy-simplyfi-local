@@ -4,12 +4,11 @@
 const STATUS_REFRESH_MS = 5000;
 const MAINT_REFRESH_MS = 60000;
 
-const RUNNING = ["beh", "pauza", "odlozeno"];
-
 const state = {
   programs: [],    // katalog z /api/programy
   selected: null,  // kód vybraného programu
   stav: null,      // poslední Stav ze serveru
+  settingPending: false,  // běží změna nastavení – obnova stavu ovládací prvky nepřepisuje
 };
 
 const $ = (id) => document.getElementById(id);
@@ -47,6 +46,7 @@ function showResult(target, message, isError = false) {
 /** Text výsledku příkazu: v dry-run plaintext, ostře změny stavu. */
 function describeCommand(res) {
   if (!res.odeslano) return `Zkušební režim – neodesláno: ${res.plaintext}`;
+  if (res.varovani) return res.varovani;
   const changes = Object.entries(res.zmeny || {}).map(([k, [a, b]]) => `${k} ${a}→${b}`);
   return changes.length ? `Odesláno. Změny: ${changes.join(", ")}`
     : "Odesláno, ale myčka zatím nic nezměnila – zkontrolujte stav.";
@@ -70,7 +70,7 @@ function renderStatus(data) {
   remote.textContent = s.dalkove_ovladani ? "Dálkové ovládání zapnuto" : "Dálkové ovládání vypnuto";
   remote.className = s.dalkove_ovladani ? "badge badge-ok" : "badge badge-warn";
 
-  const running = RUNNING.includes(s.stav);
+  const running = s.aktivni;
   $("st-program").textContent = s.program_nazev + (s.volby.length ? ` · ${optionNames(s.program, s.volby)}` : "");
   $("st-phase").textContent = s.faze + (s.dvirka_otevrena ? " · dvířka otevřená" : "");
 
@@ -235,22 +235,28 @@ async function stopProgram() {
 
 /* ---------- nastavení ---------- */
 
-/** Nastaví ovládací prvky podle stavu (prvek, se kterým uživatel právě pracuje, nepřepisuje). */
+/**
+ * Nastaví ovládací prvky podle skutečného stavu myčky. Během odesílání změny je
+ * nepřepisuje; po něm (i po chybě nebo v dry-run) se vrátí na to, co myčka opravdu má.
+ */
 function renderSettings(n) {
-  const set = (id, apply) => { if (document.activeElement !== $(id)) apply($(id)); };
-  set("set-sound", (e) => { e.checked = n.zvuk; });
-  set("set-last", (e) => { e.checked = n.posledni_cyklus; });
-  set("set-hardness", (e) => { e.value = String(n.tvrdost); });
+  if (state.settingPending) return;
+  $("set-sound").checked = n.zvuk;
+  $("set-last").checked = n.posledni_cyklus;
+  $("set-hardness").value = String(n.tvrdost);
 }
 
-/** Odešle jedno nastavení. */
+/** Odešle jedno nastavení a pak načte skutečný stav. */
 async function sendSetting(body) {
+  state.settingPending = true;
   try {
     const res = await apiPost("/nastaveni", body);
     showResult($("settings-result"), describeCommand(res));
-    loadStatus();
   } catch (err) {
     showResult($("settings-result"), err.message, true);
+  } finally {
+    state.settingPending = false;
+    loadStatus();
   }
 }
 

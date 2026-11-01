@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -27,6 +29,18 @@ class Settings(BaseSettings):
     verify_seconds: float = 5.0
     # Složka s historií; v Dockeru připojit jako volume (např. /data).
     data_dir: Path = Path("data")
+    # Časová zóna domácnosti – „konec v HH:MM“ i historie se počítají v ní, ne v zóně
+    # kontejneru (ta bývá UTC). Databázi zón dodává balíček tzdata (Windows, slim obrazy).
+    tz: str = "Europe/Prague"
+
+    @property
+    def zone(self) -> ZoneInfo:
+        """Časová zóna domácnosti."""
+        return ZoneInfo(self.tz)
+
+    def now(self) -> datetime:
+        """Aktuální čas v zóně domácnosti (pro výpočty „konec v“ a historii)."""
+        return datetime.now(self.zone)
 
     @property
     def history_path(self) -> Path:

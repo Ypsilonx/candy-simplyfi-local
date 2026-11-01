@@ -25,6 +25,7 @@ from .client import read_status, send_params, xor_encrypt
 
 # Program code -> panel position (w1 / r1), measured in experiment P4.
 # App-only programs (P9, P16, P17, P20) have no known position yet: use --w1.
+# Single source of truth - the ovladac server reads it too (programs.py).
 PANEL_POSITIONS = {"P2": 1, "P5": 2, "P8": 3, "P12": 4, "P19": 5}
 
 # Option bitmask used by the app (OpzProg), see CandyDishWasher.getOptions.

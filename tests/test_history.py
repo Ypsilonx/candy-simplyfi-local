@@ -60,3 +60,11 @@ def test_history_roundtrip_and_maintenance(tmp_path, p2_timed):
     assert (m["filtr_zbyva"], m["odvapneni_zbyva"]) == (99, 81)
     assert m["filtr_posledni"].startswith("2026-11-01T02:30:10")
     assert m["odvapneni_posledni"] is None
+
+
+def test_door_opened_while_waiting_is_not_a_cycle(p2_timed):
+    t0, running = p2_timed[0]
+    waiting = {**running, "DelayStart": "60"}
+    rows = [(t0, waiting), (t0 + timedelta(minutes=1), {**waiting, "StatoDWash": "4"}),
+            (t0 + timedelta(minutes=2), waiting)]
+    assert replay(rows) == []

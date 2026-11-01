@@ -11,9 +11,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
 
-from .model import Stav
-
-RUNNING = ("beh", "pauza")
+from .model import RUNNING, Stav
 
 FILTER_INTERVAL = 100
 # Odvápnění po N cyklech podle tvrdosti vody r7 (index 0–5), z appky.
@@ -148,7 +146,7 @@ class History:
         """Zapíše provedenou údržbu (``filtr`` / ``odvapneni``), výchozí čas = teď."""
         if kind not in MAINTENANCE_KINDS:
             raise ValueError(f"Neznámý druh údržby: {kind}")
-        ts = ts or datetime.now().astimezone()
+        ts = ts or datetime.now().astimezone()  # volající (server) předává čas v zóně domácnosti
         self._append({"typ": "udrzba", "druh": kind, "cas": _iso(ts)})
 
     def maintenance(self, hardness: int) -> dict:

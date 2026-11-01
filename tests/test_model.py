@@ -39,3 +39,9 @@ def test_delayed_start_and_warnings(p2_log):
     s = interpret(raw)
     assert (s.stav, s.odlozeni_min) == ("odlozeno", 90)
     assert s.varovani == ["Doplňte sůl", "Chyba myčky E5"]
+
+
+def test_pause_while_waiting_for_delayed_start(p2_log):
+    # Otevřená dvířka během čekání (4 + DelayStart > 0) je pořád čekání, ne mytí.
+    s = interpret({**p2_log[0], "StatoDWash": "4", "DelayStart": "60"})
+    assert (s.stav, s.faze, s.aktivni) == ("odlozeno", "", True)

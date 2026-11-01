@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from candy_netscan import send
@@ -58,9 +58,14 @@ class Program:
 
 
 def load_catalog(path: Path = CATALOG_PATH) -> dict[str, Program]:
-    """Načte katalog z JSON, vrátí slovník kód → Program (v pořadí souboru)."""
+    """Načte katalog z JSON, vrátí slovník kód → Program (v pořadí souboru).
+
+    Pozice na panelu (``w1``) jsou jen v ``send.PANEL_POSITIONS`` – jediný zdroj
+    pro CLI i server; ``candy_netscan`` tak zůstává samostatné (Pydroid).
+    """
     data = json.loads(path.read_text(encoding="utf-8"))
-    return {p["kod"]: Program(**p) for p in data["programy"]}
+    return {p["kod"]: Program(**p, w1=send.PANEL_POSITIONS.get(p["kod"]))
+            for p in data["programy"]}
 
 
 CATALOG = load_catalog()
@@ -101,15 +106,19 @@ def delay_for_end(now: datetime, konec: datetime,
     jen po 30 min, takže odhad se od přání liší až o ±15 min.
     ``ValueError``, když program do požadovaného času nestihne doběhnout
     nebo by odložení přesáhlo 24 h.
+
+    Počítá se v UTC: rozdíl dvou časů se stejnou ``ZoneInfo`` Python bere podle
+    ručiček hodin, takže by přes noc se změnou času vyšel o hodinu vedle.
     """
-    wait = konec - now - timedelta(minutes=delka_min)
+    now_utc = now.astimezone(timezone.utc)
+    wait = konec.astimezone(timezone.utc) - now_utc - timedelta(minutes=delka_min)
     if wait < timedelta(0):
         raise ValueError("Program do požadovaného času nestihne doběhnout")
     half_hours = round(wait / timedelta(minutes=30))
     if half_hours > MAX_DELAY_HALF_HOURS:
         raise ValueError("Odložení startu může být nejvýš 24 hodin")
-    estimate = now + timedelta(minutes=30 * half_hours + delka_min)
-    return half_hours, estimate
+    estimate = now_utc + timedelta(minutes=30 * half_hours + delka_min)
+    return half_hours, estimate.astimezone(now.tzinfo)
 
 
 def options_mask(opts: set[str]) -> int:

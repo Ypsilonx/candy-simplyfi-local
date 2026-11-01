@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field, model_validator
 
 from ..services import programs
-from ..services.appliance import Appliance, ApplianceError, CommandResult
+from ..services.appliance import Appliance, ApplianceBusy, ApplianceError, CommandResult
 from ..services.history import MAINTENANCE_KINDS
 
 router = APIRouter(prefix="/api")
@@ -21,10 +21,12 @@ def _appliance(request: Request) -> Appliance:
     return request.app.state.appliance
 
 
-async def _run(appliance: Appliance, params: str) -> dict:
-    """Provede příkaz a převede chyby na HTTP odpovědi."""
+async def _run(appliance: Appliance, params: str, require_idle: bool = False) -> dict:
+    """Provede příkaz a převede chyby na HTTP odpovědi (rozjetý program 409, jinak 503)."""
     try:
-        result: CommandResult = await appliance.command(params)
+        result: CommandResult = await appliance.command(params, require_idle)
+    except ApplianceBusy as exc:
+        raise HTTPException(409, str(exc)) from exc
     except ApplianceError as exc:
         raise HTTPException(503, str(exc)) from exc
     return asdict(result)
@@ -76,7 +78,11 @@ class MaintenanceRequest(BaseModel):
 
 
 def _next_occurrence(now: datetime, at: time) -> datetime:
-    """Nejbližší budoucí okamžik s časem ``at`` (dnes, nebo zítra)."""
+    """Nejbližší budoucí okamžik s časem ``at`` (dnes, nebo zítra).
+
+    ``now`` nese ``ZoneInfo`` – ``replace`` i ``+ 1 den`` pak drží čas na ručičkách
+    i přes změnu letního času.
+    """
     target = now.replace(hour=at.hour, minute=at.minute, second=0, microsecond=0)
     return target if target > now else target + timedelta(days=1)
 
@@ -113,13 +119,11 @@ async def get_programs() -> list[dict]:
 async def start(body: StartRequest, request: Request) -> dict:
     """Spustí program; vrací výsledek příkazu a odhad konce."""
     a = _appliance(request)
-    if a.stav and a.stav.stav in ("beh", "pauza", "odlozeno"):
-        raise HTTPException(409, "Myčka už má spuštěný program – nejdřív ho zastavte")
     try:
         program = programs.get_program(body.program)
     except KeyError as exc:
         raise HTTPException(404, f"Neznámý program {body.program}") from exc
-    now = datetime.now().astimezone()
+    now = a.settings.now()
     try:
         if body.konec is not None:
             delay, end = programs.delay_for_end(
@@ -130,7 +134,7 @@ async def start(body: StartRequest, request: Request) -> dict:
         params = programs.start_params(program.kod, set(body.volby), delay)
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
-    return {**await _run(a, params), "odlozeni": delay,
+    return {**await _run(a, params, require_idle=True), "odlozeni": delay,
             "odhad_konce": end.isoformat(timespec="minutes")}
 
 
@@ -161,6 +165,13 @@ async def get_maintenance(request: Request) -> dict:
 
 @router.post("/udrzba")
 async def mark_maintenance(body: MaintenanceRequest, request: Request) -> dict:
-    """Zapíše provedenou údržbu a vrátí nová počítadla."""
-    _appliance(request).history.mark(body.druh)
+    """Zapíše provedenou údržbu a vrátí nová počítadla.
+
+    Bez načteného stavu (neznámá tvrdost) se nic nezapíše – jinak by uživatel viděl
+    chybu u uloženého záznamu a klikl znovu.
+    """
+    a = _appliance(request)
+    if a.stav is None:
+        raise HTTPException(503, "Stav myčky zatím není načtený – zkuste to za chvíli")
+    a.history.mark(body.druh, a.settings.now())
     return await get_maintenance(request)

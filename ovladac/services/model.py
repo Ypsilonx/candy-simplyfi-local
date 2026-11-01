@@ -21,6 +21,11 @@ STATES: dict[str, tuple[str, str]] = {
     "99": ("odlozeno", "Čeká na odložený start"),
 }
 
+# Myčka myje (pauza = otevřená dvířka během mytí, cyklus pokračuje).
+RUNNING = ("beh", "pauza")
+# Myčka má program „rozjetý“ – nový start ani nastavení programu nedávají smysl.
+ACTIVE = (*RUNNING, "odlozeno")
+
 # r2 → český název fáze.
 PHASES = {"0": "", "1": "Předmytí", "2": "Mytí", "3": "Oplach", "4": "Sušení",
           "5": "Konec", "9": "Pauza"}
@@ -52,6 +57,7 @@ class Stav:
     zbyva_min: int
     odlozeni_min: int
     volby: list[str]
+    aktivni: bool       # stav je v ACTIVE (myje, pauza, čeká na start)
     dalkove_ovladani: bool
     dvirka_otevrena: bool
     nastaveni: Nastaveni
@@ -70,9 +76,10 @@ def interpret(raw: dict[str, str]) -> Stav:
     """Převede surový stav (hodnoty jako stringy) na ``Stav``."""
     code, label = STATES.get(raw.get("StatoDWash", "0"), STATES["0"])
     delay = _int(raw, "DelayStart")
-    if code == "beh" and delay > 0:  # čekající odložený start hlásí myčka jako běh
+    # Čekající odložený start hlásí myčka jako běh (3), s otevřenými dvířky asi jako pauzu (4).
+    if code in RUNNING and delay > 0:
         code, label = STATES["99"]
-    running = code in ("beh", "pauza")
+    running = code in RUNNING
 
     program = raw.get("Program", "")
     catalog_entry = CATALOG.get(program)
@@ -97,6 +104,7 @@ def interpret(raw: dict[str, str]) -> Stav:
         # Mimo čekání drží myčka v DelayStart starou hodnotu (viděno ve stavu výběr).
         odlozeni_min=delay if code == "odlozeno" else 0,
         volby=volby,
+        aktivni=code in ACTIVE,
         dalkove_ovladani=raw.get("StatoWiFi") == "1",
         dvirka_otevrena=raw.get("OpenDoor") == "1",
         nastaveni=Nastaveni(

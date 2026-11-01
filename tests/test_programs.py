@@ -1,9 +1,11 @@
 """Testy katalogu programů: povolené volby, vylučování, „konec v“, příkaz startu."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 
+from ovladac.routers.api import _next_occurrence
 from ovladac.services.programs import (allowed_options, delay_for_end,
                                        start_params, validate_options)
 
@@ -55,3 +57,14 @@ def test_start_params_matches_verified_command():
 def test_app_only_program_not_startable():
     with pytest.raises(ValueError, match="neumíme"):
         start_params("P9", set())
+
+
+def test_delay_for_end_across_dst_change():
+    prague = ZoneInfo("Europe/Prague")
+    # Noc na 25. 10. 2026 má o hodinu víc (změna na zimní čas ve 3:00).
+    now = datetime(2026, 10, 24, 22, 0, tzinfo=prague)
+    konec = _next_occurrence(now, time(6, 0))
+    assert (konec.day, konec.hour, konec.minute) == (25, 6, 0)
+    half_hours, end = delay_for_end(now, konec, 130)
+    assert half_hours == 14  # skutečně uběhne 9 h, ne 8 h
+    assert (end.day, end.hour, end.minute) == (25, 6, 10)
