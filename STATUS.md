@@ -25,9 +25,9 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Další krok
 
-1. Ověřit zbytek (u myčky, se souhlasem): volby ve startu, programy jen z appky.
-2. Vlastní nástroj místo appky (návrh A: Python + jednoduchá webová stránka): stav, start/stop/pauza,
-   odložený start „konec v“, počítání cyklů pro údržbu (filtr 100, odvápnění dle `r7`).
+1. Ovladač myčky – návrh `docs/specs/ovladac-mycky.md` a plán `docs/plans/ovladac-mycky.md` schváleny.
+   Začít **T1** (uv projekt + `candy_netscan/client.py`) ve větvi `feature/ovladac`.
+2. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 
 ## Otevřené otázky / slepé uličky
 
