@@ -1,0 +1,23 @@
+{
+  "_comment": "Katalog programů. w1 = pozice na panelu (r1), null = neznámá (program jen z appky, zatím nelze spustit). delka_min = naše měření, delka_appka_min = DB appky. maska = available_options z APK (1 ExtraDry, 2 1/2 náplň, 4 Eco, 8 3v1, 16 dvířka).",
+  "programy": [
+    {"kod": "P2", "nazev": "Intenzivní", "popis": "Silně znečištěné nádobí, hrnce", "teplota": 75,
+     "w1": 1, "delka_min": 130, "delka_appka_min": 130, "maska": 31},
+    {"kod": "P5", "nazev": "Univerzální", "popis": "Běžně znečištěné nádobí", "teplota": 60,
+     "w1": 2, "delka_min": 120, "delka_appka_min": 120, "maska": 31},
+    {"kod": "P8", "nazev": "Eco", "popis": "Úsporný program, nejnižší spotřeba", "teplota": 45,
+     "w1": 3, "delka_min": 230, "delka_appka_min": 180, "maska": 31},
+    {"kod": "P12", "nazev": "Předmytí", "popis": "Krátké opláchnutí před pozdějším mytím", "teplota": null,
+     "w1": 4, "delka_min": 5, "delka_appka_min": 5, "maska": 8},
+    {"kod": "P19", "nazev": "ZOOM 39′", "popis": "Rychlé mytí lehce znečištěného nádobí", "teplota": 60,
+     "w1": 5, "delka_min": 39, "delka_appka_min": 39, "maska": 28},
+    {"kod": "P9", "nazev": "Jemný", "popis": "Sklo a choulostivé nádobí", "teplota": 45,
+     "w1": null, "delka_min": null, "delka_appka_min": 85, "maska": 31},
+    {"kod": "P16", "nazev": "Auto denní", "popis": "Automatika podle znečištění", "teplota": 60,
+     "w1": null, "delka_min": null, "delka_appka_min": 95, "maska": 31},
+    {"kod": "P17", "nazev": "Noční", "popis": "Tichý dlouhý program", "teplota": 55,
+     "w1": null, "delka_min": null, "delka_appka_min": 240, "maska": 28},
+    {"kod": "P20", "nazev": "Rychlý 24′", "popis": "Nejkratší mytí", "teplota": 50,
+     "w1": null, "delka_min": null, "delka_appka_min": 24, "maska": 8}
+  ]
+}
