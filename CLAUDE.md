@@ -16,6 +16,9 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
   (IP a klíč z `.env`, viz `.env.example`)
 - Příkaz myčce: `python -m candy_netscan.send start P12` (dry-run), ostře s `--send`; dále `stop`,
   `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
+- Prostředí ovladače: `uv sync`, pak totéž přes `uv run …` (např. `uv run python -m candy_netscan.send start P12`).
+  Nástroje v `candy_netscan/` jdou dál spustit i holým `python` bez závislostí.
+- Síťová vrstva (XOR, čtení, zápis) je jen v `candy_netscan/client.py` – watch, send i server ji sdílí.
 
 ## Mapa projektu
 

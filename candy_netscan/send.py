@@ -18,12 +18,10 @@ import argparse
 import os
 import sys
 import time
-import urllib.request
 from typing import Dict
 
-from .candy_watch import diff, load_dotenv, read_status
-
-WRITE_PATH = "/http-write.json?encrypted=1&data="
+from .candy_watch import diff, load_dotenv
+from .client import read_status, send_params, xor_encrypt
 
 # Program code -> panel position (w1 / r1), measured in experiment P4.
 # App-only programs (P9, P16, P17, P20) have no known position yet: use --w1.
@@ -31,12 +29,6 @@ PANEL_POSITIONS = {"P2": 1, "P5": 2, "P8": 3, "P12": 4, "P19": 5}
 
 # Option bitmask used by the app (OpzProg), see CandyDishWasher.getOptions.
 OPT_EXTRADRY, OPT_HALFLOAD, OPT_ECO, OPT_TAB, OPT_OPENDOOR = 1, 2, 4, 8, 16
-
-
-def xor_encrypt(plaintext: str, key: bytes) -> str:
-    """Return the app-compatible payload: XOR with the key, uppercase hex."""
-    data = plaintext.encode("ascii")
-    return bytes(b ^ key[i % len(key)] for i, b in enumerate(data)).hex().upper()
 
 
 def start_params(program: str, w1: int, delay: int, mask: int) -> str:
@@ -73,13 +65,6 @@ def build_params(args: argparse.Namespace) -> str:
     return start_params(program, w1, args.delay, mask)
 
 
-def send(ip: str, payload: str, timeout: float) -> str:
-    """Send the encrypted payload, return the raw HTTP body."""
-    with urllib.request.urlopen(f"http://{ip}{WRITE_PATH}{payload}",
-                                timeout=timeout) as resp:
-        return resp.read().decode("utf-8", errors="replace")
-
-
 def parse_args(argv) -> argparse.Namespace:
     """Define the CLI: start/stop/raw + common flags."""
     # Common flags live in a parent parser so they work after the subcommand.
@@ -114,19 +99,19 @@ def main(argv) -> int:
     if not ip or not key:
         sys.exit("CANDY_IP / CANDY_KEY missing (.env)")
     params = build_params(args)
-    payload = xor_encrypt(params, key.encode("ascii"))
+    payload = xor_encrypt(params, key)
     print(f"plaintext: {params}\npayload:   {payload}")
     if not args.send:
         print("dry run - nothing sent (add --send)")
         return 0
 
-    before = read_status(ip, key.encode("ascii"), args.timeout)
+    before = read_status(ip, key, args.timeout)
     if before.get("StatoWiFi") != "1":
         sys.exit("Remote control is off (StatoWiFi != 1) - enable it on the "
                  "dishwasher first.")
-    print(f"response:  {send(ip, payload, args.timeout)}")
+    print(f"response:  {send_params(ip, key, params, args.timeout)}")
     time.sleep(args.wait)
-    after: Dict[str, str] = read_status(ip, key.encode("ascii"), args.timeout)
+    after: Dict[str, str] = read_status(ip, key, args.timeout)
     changes = diff(before, after)
     for k, (old, new) in changes.items():
         print(f"    {k:<14} {old} -> {new}")
