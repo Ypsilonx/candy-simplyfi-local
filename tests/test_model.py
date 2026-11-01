@@ -29,6 +29,11 @@ def test_panel_selection_without_remote(panel_log):
     assert not s.dalkove_ovladani and s.volby == []
 
 
+def test_stale_delay_ignored_outside_waiting(panel_log):
+    s = interpret({**panel_log[-1], "DelayStart": "29"})
+    assert (s.stav, s.odlozeni_min) == ("vyber", 0)
+
+
 def test_delayed_start_and_warnings(p2_log):
     raw = {**p2_log[0], "DelayStart": "90", "MissSalt": "1", "CodiceErrore": "E5"}
     s = interpret(raw)

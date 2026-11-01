@@ -18,6 +18,8 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
   `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
 - Prostředí ovladače: `uv sync`, pak totéž přes `uv run …` (např. `uv run python -m candy_netscan.send start P12`).
   Nástroje v `candy_netscan/` jdou dál spustit i holým `python` bez závislostí.
+- Ovladač: `uv run uvicorn ovladac.main:app` (http://127.0.0.1:8000, výchozí `DRY_RUN=true` – nic neposílá).
+  Cílový provoz: Docker na Linux PC (viz plán T6).
 - Síťová vrstva (XOR, čtení, zápis) je jen v `candy_netscan/client.py` – watch, send i server ji sdílí.
 
 ## Mapa projektu

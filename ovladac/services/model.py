@@ -94,7 +94,8 @@ def interpret(raw: dict[str, str]) -> Stav:
         program=program,
         program_nazev=catalog_entry.nazev if catalog_entry else program,
         zbyva_min=_int(raw, "RemTime"),
-        odlozeni_min=delay,
+        # Mimo čekání drží myčka v DelayStart starou hodnotu (viděno ve stavu výběr).
+        odlozeni_min=delay if code == "odlozeno" else 0,
         volby=volby,
         dalkove_ovladani=raw.get("StatoWiFi") == "1",
         dvirka_otevrena=raw.get("OpenDoor") == "1",
