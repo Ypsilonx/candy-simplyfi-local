@@ -1,0 +1,12 @@
+# Do obrazu jde jen pyproject.toml, uv.lock, .python-version, candy_netscan/ a ovladac/.
+.git
+.venv
+.vscode
+.env
+apk
+data
+docs
+tests
+**/__pycache__
+**/*.pyc
+.playwright-mcp

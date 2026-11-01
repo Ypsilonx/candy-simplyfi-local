@@ -23,12 +23,16 @@ import json
 import os
 import sys
 import time
-import urllib.request
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional
 
-READ_PATH = "/http-read.json?encrypted=1"
+# Runs both as a script (candy_netscan/ on sys.path) and as a package module.
+try:
+    from .client import read_status
+except ImportError:
+    from client import read_status  # type: ignore[no-redef]
+
 DOTENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
 
@@ -46,22 +50,8 @@ def load_dotenv(path: Path = DOTENV_PATH) -> None:
             os.environ.setdefault(name.strip(), value.strip())
 
 
-def xor_decrypt(hex_payload: str, key: bytes) -> str:
-    data = bytes.fromhex(hex_payload.strip())
-    return bytes(b ^ key[i % len(key)] for i, b in enumerate(data)).decode()
-
-
-def read_status(ip: str, key: bytes, timeout: float) -> Dict[str, str]:
-    url = f"http://{ip}{READ_PATH}"
-    with urllib.request.urlopen(url, timeout=timeout) as resp:
-        payload = resp.read().decode("ascii", errors="replace")
-    doc = json.loads(xor_decrypt(payload, key))
-    # Single top-level object, e.g. {"statusDWash": {...}}
-    (_, fields), = doc.items()
-    return {k: str(v) for k, v in fields.items()}
-
-
 def diff(old: Dict[str, str], new: Dict[str, str]) -> Dict[str, tuple]:
+    """Return ``{field: (old, new)}`` for fields that differ, sorted by name."""
     keys = old.keys() | new.keys()
     return {k: (old.get(k), new.get(k)) for k in sorted(keys)
             if old.get(k) != new.get(k)}
@@ -87,7 +77,6 @@ def parse_args(argv):
 def main(argv) -> int:
     load_dotenv()
     args = parse_args(argv)
-    key = args.key.encode("ascii")
     previous: Optional[Dict[str, str]] = None
     print("Watching... change something in the app or on the dishwasher. "
           "Ctrl+C to stop.")
@@ -95,7 +84,7 @@ def main(argv) -> int:
         while True:
             stamp = datetime.now().strftime("%H:%M:%S")
             try:
-                current = read_status(args.ip, key, args.timeout)
+                current = read_status(args.ip, args.key, args.timeout)
             except (OSError, ValueError) as exc:  # network / bad payload
                 print(f"[{stamp}] read failed: {exc}")
                 time.sleep(args.interval)

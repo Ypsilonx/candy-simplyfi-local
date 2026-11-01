@@ -16,11 +16,20 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
   (IP a klíč z `.env`, viz `.env.example`)
 - Příkaz myčce: `python -m candy_netscan.send start P12` (dry-run), ostře s `--send`; dále `stop`,
   `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
+- Prostředí ovladače: `uv sync`, pak totéž přes `uv run …` (např. `uv run python -m candy_netscan.send start P12`).
+  Nástroje v `candy_netscan/` jdou dál spustit i holým `python` bez závislostí.
+- Ovladač: `uv run uvicorn ovladac.main:app` (http://127.0.0.1:8000, výchozí `DRY_RUN=true` – nic neposílá).
+  Cílový provoz: Docker na Linux PC – `Dockerfile`, `compose.yaml`, návod `docs/nasazeni.md`.
+- Web UI `ovladac/static/`: vanilla JS bez bundleru, pořadí skriptů závazné – `api.js` (definuje `API_BASE_URL`
+  a `api*`) před `app.js`. Po změně CSS/JS zvýšit `?v=` v `index.html` (cache prohlížeče).
+- Síťová vrstva (XOR, čtení, zápis) je jen v `candy_netscan/client.py` – watch, send i server ji sdílí.
 
 ## Mapa projektu
 
 - `candy_netscan/` – sken LAN (ARP + OUI + sonda `/http-read.json`) a `candy_watch.py` (polling + diff + log)
 - `data/watch/` – surové logy pokusů (`<YYYY-MM-DD>_<popis>.jsonl`), commitují se
+- `data/raw/` – surový log ovladače (každé změněné čtení, všechna pole, soubor na den), mimo git;
+  při běhu ovladače nahrazuje `candy_watch` (myčka smí mít jen jednoho klienta)
 - `docs/protokol.md` – **živá mapa protokolu**: endpointy, pole, příkazy; u každého údaje stav
   (✅ ověřeno / 🟡 hypotéza / 📚 z komunity) a zdroj
 - `docs/pokusy/` – zápisník pokusů, jeden soubor na pokus (`<YYYY-MM-DD>-<popis>.md`)

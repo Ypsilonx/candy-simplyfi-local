@@ -38,8 +38,11 @@ Postup: jeden task → ověření → zastávka. Práce ve větvi `feature/ovlad
   nastavení, údržba + historie.
 - Ověřit: Playwright v Edge 390 px a 1440 px, konzole bez chyb, žádný požadavek mimo localhost.
 
-## T6 – ostrý test a nasazení na Linux (později)
-- Ostrý start z UI (P12 → stop) se souhlasem; `docs/nasazeni-linux.md` + systemd unit.
+## T6 – ostrý test a nasazení na Linux v Dockeru (později)
+- Ostrý start z UI (P12 → stop) se souhlasem.
+- `Dockerfile` (uv, `uvicorn ovladac.main:app --host 0.0.0.0`), `compose.yaml` (`env_file: .env`,
+  volume pro `DATA_DIR=/data`, `TZ=Europe/Prague`, `restart: unless-stopped`), `docs/nasazeni.md`.
+- Do té doby běží ovladač na hlavním Windows PC (`uv run uvicorn …`).
 
 ## Body napojení
 
@@ -51,6 +54,8 @@ Postup: jeden task → ověření → zastávka. Práce ve větvi `feature/ovlad
   posílat v půlhodinách, číst v minutách; `r2` mimo běh drží starou fázi.
 - **FastAPI lifespan** – poller jako `asyncio` task startovaný v `lifespan`, rušený při vypnutí;
   síťová volání myčky jsou synchronní (`urllib`) → `asyncio.to_thread`; příkazy a čtení přes jeden `asyncio.Lock`.
-- **uvicorn** – Windows vývoj: `--host 0.0.0.0` jen pokud chceš z mobilu (firewall Windows se zeptá);
-  Linux: systemd služba, `TZ` a práva k `data/`.
+- **uvicorn** – Windows: `--host 0.0.0.0` jen pokud chceš z mobilu (firewall Windows se zeptá).
+- **Docker (Linux)** – konfigurace jen z proměnných prostředí (`.env` nepovinný); historie ve volume
+  (`DATA_DIR`); kontejner musí znát `TZ` (jinak časy v UTC) a mít `tzdata`; z bridge sítě je myčka
+  na LAN dosažitelná přímo (`network_mode: host` netřeba); logy na stdout; SIGTERM → lifespan zruší poller.
 - **Čas** – historie v ISO 8601 s offsetem (`datetime.now().astimezone()`), ne naivní čas.

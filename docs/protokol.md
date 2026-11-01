@@ -5,7 +5,7 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` · [P12] `pokusy/2026-11-01-autoclean.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
@@ -57,14 +57,14 @@ Appka čte stav lokálně á 15 s.
 | `r1` | pozice programu na panelu (1–5) | ✅ [P4] 🔍 |
 | `RemTime` | zbývající minuty; mimo běh jmenovitá délka | ✅ [P1] |
 | `StartStop` | aktivní program (zůstává 1 i po konci, dokud nepřijde reset) | ✅ 🔍 |
-| `DelayStart` | zbývající minuty do odloženého startu | ✅ [P9] |
+| `DelayStart` | zbývající minuty do odloženého startu; mimo čekání drží starou hodnotu (start ji vynuluje) | ✅ [P9, P11] |
 | `TreinUno`, `Eco`, `MetaCarico`, `ExtraDry`, `OpenDoorOpt` | volby 3v1, Eco, ½ náplň, ExtraDry, auto-otevření | 🔍 |
 | `OpenDoor` | dvířka otevřená; během běhu → pauza (`StatoDWash=4`), po zavření ~3 s pokračuje | ✅ [P3, P9] |
 | `MissSalt`, `MissRinse` | chybí sůl / leštidlo (jen příznak, žádná hladina) | 🔍 |
 | `CodiceErrore` | `E<n>`, n > 0 = chyba (číselník v DB appky) | 🔍 |
 | `CheckUp` | kontrola: 0 –, 1 probíhá, 2 hotovo, 3 chyba | 🔍 |
 | `r6` zvuk (`BM`) · `r7` tvrdost vody (`HL`, u nás 2) · `r8` poslední cyklus (`LC`) | nastavení uložená v myčce, přežijí restart | ✅ [P10] |
-| `r9` | `H_<cycleId>` = autoclean, jinak `NULL` | 🔍 |
+| `r9` | ozvěna `w3` z posledního startu: `H_<cycleId>` = autoclean (u nás `H_2 \` s neescapovaným lomítkem – rozbije striktní JSON), jinak `NULL`. **Drží se i po konci cyklu** – appka ho bere jen při běhu | ✅ [P12] |
 | `r15` | > 0 = odložení v půlhodinách + checkup | 🔍 |
 | `r5` | 🟡 1 = neběží/připraveno: 1→0 při startu, 0→1 po stopu (v P1 1→0 až v 16. min – log začal po startu) | [P1, P8] |
 | `r3`, `r4`, `Reset` | nepojmenováno | ❓ |
@@ -86,6 +86,8 @@ Appka čte stav lokálně á 15 s.
 
 - **Filtr**: upozornění každých **100 cyklů** (součet `s1`–`s21` ze statistik).
 - **Odvápnění / autoclean**: po 110/105/100/95/90/85 cyklech podle tvrdosti `r7` (u nás 100).
+- **Čisticí cyklus** = u nás **P2 Intenzivní** s prázdnou myčkou a čističem; appka přidá `w3=H_2`
+  → myčka ho přijme a během čištění hlásí `r9=H_2`. ✅ [P12] Ovladač čištění pozná jen podle svého tlačítka, `r9` nepoužívá.
 - „Naposledy vyčištěno“ a tablety si appka pamatuje jen v telefonu.
 
 ## Programy [P4, P5]
