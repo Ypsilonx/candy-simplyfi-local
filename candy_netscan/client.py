@@ -36,14 +36,23 @@ def _get(url: str, timeout: float) -> str:
         return resp.read().decode("ascii", errors="replace")
 
 
-def read_status(ip: str, key: str, timeout: float = 8.0) -> Dict[str, str]:
-    """Read and decrypt the status, return its fields (all values as strings).
+def parse_status(text: str) -> Dict[str, str]:
+    """Parse the decrypted status document, return its fields (values as strings).
 
     The document has a single top-level object, e.g. ``{"statusDWash": {...}}``.
+    The firmware does not escape backslashes: during autoclean it sends
+    ``"r9":"H_2 \\"`` (seen in experiment P12), which breaks a strict JSON
+    parser. Its values never contain real escapes, so every backslash is
+    taken literally.
     """
-    doc = json.loads(xor_decrypt(_get(f"http://{ip}{READ_PATH}", timeout), key))
+    doc = json.loads(text.replace("\\", "\\\\"))
     (_, fields), = doc.items()
     return {k: str(v) for k, v in fields.items()}
+
+
+def read_status(ip: str, key: str, timeout: float = 8.0) -> Dict[str, str]:
+    """Read and decrypt the status, return its fields (all values as strings)."""
+    return parse_status(xor_decrypt(_get(f"http://{ip}{READ_PATH}", timeout), key))
 
 
 def send_params(ip: str, key: str, params: str, timeout: float = 8.0) -> str:
