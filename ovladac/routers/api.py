@@ -96,13 +96,17 @@ async def get_status(request: Request) -> dict:
 
 @router.get("/programy")
 async def get_programs() -> list[dict]:
-    """Katalog programů s povolenými volbami a jejich českými názvy."""
-    return [
-        {**asdict(p), "delka": p.delka, "spustitelny": p.spustitelny,
-         "volby": [{"kod": o, "nazev": programs.OPTIONS[o][2]}
-                   for o in programs.OPTIONS if o in programs.allowed_options(p.kod)]}
-        for p in programs.CATALOG.values()
-    ]
+    """Katalog programů s povolenými volbami, jejich českými názvy a volbami, které se vylučují."""
+    result = []
+    for p in programs.CATALOG.values():
+        allowed = programs.allowed_options(p.kod)
+        result.append({
+            **asdict(p), "delka": p.delka, "spustitelny": p.spustitelny,
+            "volby": [{"kod": o, "nazev": programs.OPTIONS[o][2]}
+                      for o in programs.OPTIONS if o in allowed],
+            "vylucne": sorted(allowed & programs.EXCLUSIVE),
+        })
+    return result
 
 
 @router.post("/start")

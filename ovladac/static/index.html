@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Myčka</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/base.css?v=1">
+  <link rel="stylesheet" href="css/app.css?v=2">
+</head>
+<body>
+  <header class="top">
+    <h1>Myčka</h1>
+    <span id="dry-run" class="badge badge-warn" hidden>Zkušební režim – příkazy se neodesílají</span>
+  </header>
+
+  <main>
+    <!-- Aktuální stav -->
+    <section class="card" id="status-card">
+      <div class="status-head">
+        <h2 id="st-label">Načítám…</h2>
+        <span id="st-remote" class="badge"></span>
+      </div>
+      <p id="st-program" class="big"></p>
+      <p id="st-phase" class="muted"></p>
+      <div class="progress" id="st-progress" hidden><div class="bar"></div></div>
+      <p id="st-time"></p>
+      <ul id="st-warnings" class="warnings"></ul>
+      <p id="st-error" class="error" hidden></p>
+      <p class="muted small" id="st-updated"></p>
+      <button id="btn-stop" class="btn btn-danger" hidden>Zastavit</button>
+    </section>
+
+    <!-- Nový program -->
+    <section class="card" id="start-card">
+      <h2>Spustit program</h2>
+      <div id="programs" class="program-grid"></div>
+      <p id="prog-desc" class="muted"></p>
+      <fieldset id="options" class="options"><legend>Volby</legend></fieldset>
+      <fieldset class="timing">
+        <legend>Kdy</legend>
+        <label><input type="radio" name="timing" value="now" checked> Hned</label>
+        <label><input type="radio" name="timing" value="end"> Konec v
+          <input type="time" id="end-time" value="06:00"></label>
+      </fieldset>
+      <p id="start-preview" class="muted"></p>
+      <button id="btn-start" class="btn btn-primary">Spustit</button>
+      <p id="start-result" class="result" hidden></p>
+    </section>
+
+    <!-- Údržba a historie -->
+    <section class="card" id="maint-card">
+      <h2>Údržba</h2>
+      <div class="maint-row">
+        <div><strong>Filtr</strong> <span id="m-filter"></span><br>
+          <span class="muted small" id="m-filter-last"></span></div>
+        <button class="btn" data-mark="filtr">Vyčištěno</button>
+      </div>
+      <div class="maint-row">
+        <div><strong>Odvápnění</strong> <span id="m-descale"></span><br>
+          <span class="muted small" id="m-descale-last"></span></div>
+        <button class="btn" data-mark="odvapneni">Odvápněno</button>
+      </div>
+      <h3>Historie</h3>
+      <div class="table-wrap">
+        <table class="history">
+          <thead><tr><th>Start</th><th>Program</th><th>Volby</th><th>Délka</th><th>Výsledek</th></tr></thead>
+          <tbody id="history"></tbody>
+        </table>
+      </div>
+      <p id="history-empty" class="muted" hidden>Zatím žádný zaznamenaný cyklus.</p>
+    </section>
+
+    <!-- Nastavení myčky -->
+    <section class="card" id="settings-card">
+      <h2>Nastavení myčky</h2>
+      <label class="setting"><span>Zvuk</span><input type="checkbox" id="set-sound"></label>
+      <label class="setting"><span>Pamatovat poslední program</span><input type="checkbox" id="set-last"></label>
+      <label class="setting"><span>Tvrdost vody</span>
+        <select id="set-hardness">
+          <option value="0">0 – velmi měkká (0–3 °dH)</option>
+          <option value="1">1 – měkká (4–9 °dH)</option>
+          <option value="2">2 – středně tvrdá (10–16 °dH)</option>
+          <option value="3">3 – dosti tvrdá (17–25 °dH)</option>
+          <option value="4">4 – tvrdá (26–33 °dH)</option>
+          <option value="5">5 – velmi tvrdá (34–50 °dH)</option>
+        </select>
+      </label>
+      <p id="settings-result" class="result" hidden></p>
+    </section>
+  </main>
+
+  <!-- Pořadí je závazné: api.js definuje API_BASE_URL a funkce, které app.js používá. -->
+  <script src="js/api.js?v=1"></script>
+  <script src="js/app.js?v=2"></script>
+</body>
+</html>

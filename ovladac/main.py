@@ -10,8 +10,10 @@ import asyncio
 import contextlib
 import logging
 from collections.abc import AsyncIterator
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from .config import Settings
 from .routers import api
@@ -39,5 +41,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             await task
 
 
+STATIC_DIR = Path(__file__).with_name("static")
+
 app = FastAPI(title="Ovladač myčky", lifespan=lifespan)
 app.include_router(api.router)
+# Až za API: mount na "/" by jinak zachytil i /api/… .
+app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
