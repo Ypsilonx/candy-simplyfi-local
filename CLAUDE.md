@@ -12,6 +12,7 @@ obecná pravidla jsou ve skillech, tady se neopakují.
 Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). Spouštět z kořene projektu:
 
 - Sken sítě: `python -m candy_netscan`
+- Klíč modulu: `python -m candy_netscan.find_key <ip>` (známý začátek plaintextu, viz pokus P13)
 - Sledování stavu: `python candy_netscan/candy_watch.py --log data/watch/<datum>_<popis>.jsonl`
   (IP a klíč z `.env`, viz `.env.example`)
 - Příkaz myčce: `python -m candy_netscan.send start P12` (dry-run), ostře s `--send`; dále `stop`,

@@ -5,12 +5,14 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` · [P12] `pokusy/2026-11-01-autoclean.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` · [P12] `pokusy/2026-11-01-autoclean.md` · [P13] `pokusy/2026-11-01-ziskani-klice.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
 
 - Wi-Fi modul na ESP, HTTP port 80, bez autentizace – jen XOR klíčem (16 ASCII znaků). ✅
+- Klíč je pro každý modul jiný; dopočítá se z odpovědi `http-read.json` – plaintext vždy začíná
+  `{\r\n\t"statusDWash` (16 B), klíč = šifra ⊕ tento začátek (`candy_netscan/find_key.py`). ✅ [P13]
 - V appce řada **nautilus/Axi** (ne stará `CandyDishWasher`). ✅ [P7, P8]
 - Ovládání jen v **režimu dálkového ovládání** (Wi-Fi tlačítko, `StatoWiFi=1`); při mačkání panelu ~5 s 0. ✅ [P4]
 
