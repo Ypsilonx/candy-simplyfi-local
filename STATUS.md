@@ -9,6 +9,8 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Hotovo
 
+- ✅ Ovladač (FastAPI + web UI, Docker soubory) mergnutý do `main`; provoz zatím na Windows PC
+  (`uv run uvicorn … --host 0.0.0.0`), Docker na Linuxu nesestaven.
 - ✅ Ovladač ukládá surový log čtení (`data/raw/`, jen změny, všechna pole – nic se nefiltruje).
 - ✅ P12: **čisticí cyklus naostro** – P2 + `w3=H_2` z UI, po dokončení se samo zapsalo odvápnění.
 - ✅ P11: **ovladač naostro z webového UI** – start P12, stop, zápis cyklu do historie (větev `feature/ovladac`).
@@ -28,13 +30,12 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Další krok
 
-1. Ovladač myčky – návrh `docs/specs/ovladac-mycky.md` a plán `docs/plans/ovladac-mycky.md` schváleny.
-   Větev `feature/ovladac`: ✅ T1 (uv projekt + `candy_netscan/client.py`), ✅ T2 (model stavu + katalog programů), ✅ T3 (historie cyklů + údržba), ✅ T4 (FastAPI server, `DRY_RUN`), ✅ T5 (webové UI), ✅ revize větve (10 nálezů opraveno), ✅ T6a ostrý test z UI (P11).
-   ✅ T6b soubory pro Docker (`docs/nasazeni.md`, zatím nesestaveno – na Windows PC Docker není).
-   Provoz zatím na Windows PC (`uv run uvicorn … --host 0.0.0.0`).
-   ✅ Čisticí cyklus z UI včetně ostrého testu (P12). Další: merge do `main`. Potom „Statistiky a údržba v2“
-   (počáteční stav údržby, učení délek z historie, přehled statistik).
-2. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
+1. **Příprava na publikaci** (GitHub): ✅ README (česky + anglický úvod, sekce pro převzetí do HA),
+   ✅ LICENSE (MIT), ✅ kontrola úniků (klíč/IP/MAC v gitu ani historii nejsou),
+   ✅ P13 získání klíče + `candy_netscan/find_key.py` (ověřeno naživo). Zbývá: název repozitáře na GitHubu.
+2. **Vizuál webového UI** – barvy, výraznější styl stránek ovladače (`ovladac/static/css/`).
+3. „Statistiky a údržba v2“ – počáteční stav údržby, učení délek programů z historie, přehled statistik.
+4. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 
 ## Otevřené otázky / slepé uličky
 
