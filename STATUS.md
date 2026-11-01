@@ -26,8 +26,8 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 ## Další krok
 
 1. Ovladač myčky – návrh `docs/specs/ovladac-mycky.md` a plán `docs/plans/ovladac-mycky.md` schváleny.
-   Větev `feature/ovladac`: ✅ T1 (uv projekt + `candy_netscan/client.py`), ✅ T2 (model stavu + katalog programů).
-   Další **T3** (historie cyklů a údržba).
+   Větev `feature/ovladac`: ✅ T1 (uv projekt + `candy_netscan/client.py`), ✅ T2 (model stavu + katalog programů), ✅ T3 (historie cyklů + údržba).
+   Další **T4** (FastAPI server a správce myčky).
 2. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 
 ## Otevřené otázky / slepé uličky
