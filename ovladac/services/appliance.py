@@ -19,6 +19,7 @@ from ..config import Settings
 from .history import Cycle, CycleTracker, History
 from .model import Stav, interpret
 from .programs import AUTOCLEAN_PROGRAM
+from .rawlog import RawLog
 
 log = logging.getLogger(__name__)
 
@@ -54,6 +55,7 @@ class Appliance:
         self.updated: datetime | None = None
         self.error: str | None = None
         self._tracker = CycleTracker()
+        self._rawlog = RawLog(settings.raw_dir)
         # Čištění = jen cyklus spuštěný tlačítkem v ovladači. r9=H_ z myčky se nepoužívá:
         # drží se i po konci cyklu (P12), běžné mytí by se pak mohlo počítat jako odvápnění.
         self._cleaning_started = False
@@ -67,6 +69,7 @@ class Appliance:
     def _store(self, raw: dict[str, str]) -> None:
         """Uloží čtení do cache a předá ho trackeru; hotový cyklus zapíše do historie."""
         now = self.settings.now()
+        self._rawlog.write(raw, now)  # před interpretací – zůstane i čtení, na kterém by model spadl
         self.raw, self.stav, self.updated, self.error = raw, interpret(raw), now, None
         event = self._tracker.update(self.stav, now)
         if event:

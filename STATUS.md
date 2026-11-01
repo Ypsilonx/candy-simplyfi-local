@@ -9,6 +9,7 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Hotovo
 
+- ✅ Ovladač ukládá surový log čtení (`data/raw/`, jen změny, všechna pole – nic se nefiltruje).
 - ✅ P12: **čisticí cyklus naostro** – P2 + `w3=H_2` z UI, po dokončení se samo zapsalo odvápnění.
 - ✅ P11: **ovladač naostro z webového UI** – start P12, stop, zápis cyklu do historie (větev `feature/ovladac`).
 - ✅ P8: **lokální zápis funguje** – start P12 a `Reset=1` přes `candy_netscan/send.py`.

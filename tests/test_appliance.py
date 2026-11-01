@@ -1,6 +1,7 @@
 """Testy správce myčky bez sítě: síťové funkce jsou nahrazené v modulu appliance."""
 
 import asyncio
+import json
 import http.client
 
 import pytest
@@ -91,3 +92,14 @@ def test_normal_cycle_does_not_mark_descaling(make):
     _run_cycle(a, 3)
     assert not a.history.list()[0].cisteni
     assert a.history.maintenance(2)["odvapneni_posledni"] is None
+
+
+def test_raw_log_keeps_all_fields_only_on_change(make, tmp_path):
+    factory, idle, running = make
+    unknown = {**running, "r42": "neznámé"}
+    a = factory([idle, idle, unknown, unknown])
+    _run_cycle(a, 4)
+    (day,) = (tmp_path / "raw").iterdir()
+    lines = [json.loads(line) for line in day.read_text(encoding="utf-8").splitlines()]
+    assert len(lines) == 2
+    assert {k: v for k, v in lines[1].items() if k != "t"} == unknown

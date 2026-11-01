@@ -46,3 +46,8 @@ class Settings(BaseSettings):
     def history_path(self) -> Path:
         """Soubor s historií cyklů a údržby."""
         return self.data_dir / "historie.jsonl"
+
+    @property
+    def raw_dir(self) -> Path:
+        """Složka surového logu čtení (soubor na den)."""
+        return self.data_dir / "raw"

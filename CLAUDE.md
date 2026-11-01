@@ -28,6 +28,8 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
 
 - `candy_netscan/` – sken LAN (ARP + OUI + sonda `/http-read.json`) a `candy_watch.py` (polling + diff + log)
 - `data/watch/` – surové logy pokusů (`<YYYY-MM-DD>_<popis>.jsonl`), commitují se
+- `data/raw/` – surový log ovladače (každé změněné čtení, všechna pole, soubor na den), mimo git;
+  při běhu ovladače nahrazuje `candy_watch` (myčka smí mít jen jednoho klienta)
 - `docs/protokol.md` – **živá mapa protokolu**: endpointy, pole, příkazy; u každého údaje stav
   (✅ ověřeno / 🟡 hypotéza / 📚 z komunity) a zdroj
 - `docs/pokusy/` – zápisník pokusů, jeden soubor na pokus (`<YYYY-MM-DD>-<popis>.md`)

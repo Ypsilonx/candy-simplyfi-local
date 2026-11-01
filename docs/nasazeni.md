@@ -15,7 +15,7 @@ simply-Fi nech zavřenou. Souběh spojení zasekává Wi-Fi modul myčky.
    - PC: http://127.0.0.1:8000, mobil v domácí Wi-Fi: `http://<IP tohoto PC>:8000`
      (IP zjistíš `ipconfig`). Při prvním spuštění se Windows firewall zeptá – povolit pro **soukromé** sítě.
    - Jen pro PC bez mobilu stačí vynechat `--host 0.0.0.0` (pak firewall neřeší nic).
-   - Ukončení Ctrl+C. Historie zůstává v `data/historie.jsonl`.
+   - Ukončení Ctrl+C. Historie zůstává v `data/historie.jsonl`, surový log čtení v `data/raw/<datum>.jsonl`.
 3. Server běží jen dokud je PC zapnuté a okno otevřené – cykly mimo tu dobu se do historie nezapíšou.
 
 ## Později: Docker na Linux serveru
