@@ -22,6 +22,9 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
 - `docs/protokol.md` – **živá mapa protokolu**: endpointy, pole, příkazy; u každého údaje stav
   (✅ ověřeno / 🟡 hypotéza / 📚 z komunity) a zdroj
 - `docs/pokusy/` – zápisník pokusů, jeden soubor na pokus (`<YYYY-MM-DD>-<popis>.md`)
+- `apk/` (mimo git) – APK simply-Fi 3.14.1, jadx, dekompilát `apk/src/sources/`. Klíčové třídy:
+  `it/candyhoover/core/models/commands/CandyDishWasherCommand.java` (příkazy),
+  `.../models/appliances/CandyDishWasher.java` (čtení stavu). Dekompilovaný kód se nezveřejňuje ani necommituje.
 
 ## Pravidla tohoto projektu
 
