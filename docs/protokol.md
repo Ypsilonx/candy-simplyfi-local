@@ -5,13 +5,13 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
 
 - Wi-Fi modul na ESP, HTTP port 80, bez autentizace – jen XOR klíčem (16 ASCII znaků). ✅
-- V appce řada **nautilus/Axi** (ne stará `CandyDishWasher`). 🟡 [P7]
+- V appce řada **nautilus/Axi** (ne stará `CandyDishWasher`). ✅ [P7, P8]
 - Ovládání jen v **režimu dálkového ovládání** (Wi-Fi tlačítko, `StatoWiFi=1`); při mačkání panelu ~5 s 0. ✅ [P4]
 
 ## Endpointy
@@ -19,8 +19,8 @@ Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statist
 | Endpoint | Účel | Stav |
 |---|---|---|
 | `GET /http-read.json?encrypted=1` | stav (hex, XOR) | ✅ |
-| `GET /http-write.json?encrypted=1&data=<hex(xor(parametry))>` | příkaz | 🔍, u nás zatím neodesláno |
-| `GET /http-prepareStatistics.json?encrypted=1` → 15 s → `GET /http-getStatistics.json?encrypted=1` | statistiky (`statusCounters` s1–s24) | 🔍 [P7]; `getStatistics` bez prepare = timeout ✅ [P2] |
+| `GET /http-write.json?encrypted=1&data=<HEX(xor(parametry))>` | příkaz → odpověď šifrovaně `{"response":"SUCCESS"}` | ✅ [P8] |
+| `GET /http-prepareStatistics.json?encrypted=1` → 15 s → `GET /http-getStatistics.json?encrypted=1` | statistiky (`statusCounters` s1–s24) | ❌ u nás obě timeout i ve správném pořadí [P7] – jen cloud |
 | `/http-config.json` | přenastavení modulu (Wi-Fi, klíč) – **nesahat** | 📚 |
 
 Modul odpoví „úspěch“ i na ignorovaný příkaz → výsledek vždy ověřit čtením stavu. 📚
@@ -30,8 +30,8 @@ Appka čte stav lokálně á 15 s.
 
 | Akce | Parametry (plaintext před XOR) |
 |---|---|
-| Start | `DelayStart=<d>&ExtraDry=<0/1>&OpenDoorOpt=<0/1>&TreinUno=<0/1>&Program=P<n>&MetaCarico=<0/1>&OpzProg=<maska>&w1=<pozice>&StartStop=1&Eco=<0/1>` |
-| Stop / zrušit odložený start | `Reset=1` |
+| Start ✅ [P8] | `DelayStart=<d>&ExtraDry=<0/1>&OpenDoorOpt=<0/1>&TreinUno=<0/1>&Program=P<n>&MetaCarico=<0/1>&OpzProg=<maska>&w1=<pozice>&StartStop=1&Eco=<0/1>` |
+| Stop / zrušit odložený start ✅ [P8] (stop) | `Reset=1` |
 | Pauza / pokračovat | `Pa=1` / `Pa=0` |
 | Otevřít dvířka | `OpenDoorOpt=7` |
 | Tvrdost vody | `HL=<0–5>` |
@@ -65,7 +65,7 @@ Appka čte stav lokálně á 15 s.
 | `r6` zvuk (`BM`) · `r7` tvrdost vody (`HL`, u nás 2) · `r8` poslední cyklus (`LC`) | nastavení myčky | 🔍 |
 | `r9` | `H_<cycleId>` = autoclean, jinak `NULL` | 🔍 |
 | `r15` | > 0 = odložení v půlhodinách + checkup | 🔍 |
-| `r3`, `r4`, `r5`, `Reset` | nepojmenováno; `r5` 1→0 v 16. min cyklu | ❓ |
+| `r3`, `r4`, `r5`, `Reset` | nepojmenováno; `r5` 1→0 v 16. min cyklu, 0→1 po stopu (vypouštění?) | ❓ [P1, P8] |
 
 ## Údržba (počítá appka, ne myčka) 🔍 [P7]
 
@@ -89,6 +89,6 @@ Appka čte stav lokálně á 15 s.
 
 ## Otevřené otázky
 
-- Přijme naše myčka start zápisem? (první ostrý test: `P12` = 5 min, pak `Reset=1`)
-- Vrátí `prepareStatistics` + 15 s + `getStatistics` počitadla? (bezpečné čtení)
+- Ověřit: pauza `Pa=1/0`, odložený start (`DelayStart` v půlhodinách) + jeho zrušení `Reset=1`,
+  nastavení `BM`/`HL`/`LC`, programy jen z appky (P9, P16, P17, P20 – neznámé `w1`).
 - Funguje lokální API, když je myčce v routeru zablokován internet?

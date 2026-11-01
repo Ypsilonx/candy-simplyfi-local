@@ -48,6 +48,9 @@ minut v odloženém startu / checkup. U nás: `r6=0`, `r7=2`, `r8=1`, `r15=1`.
   `s1`–`s21` = počet spuštění programu podle `cycleId`, `s22`–`s24` = cykly podle teploty (0–30 / 40 / 60–90 °C).
   ⇒ Vysvětluje timeout v [P2]: chyběl krok `prepareStatistics`.
 - Appka čte statistiky přednostně z cloudu, lokálně jen jako záloha; výsledek si ukládá v telefonu.
+- ✅ Ověřeno 10:36 (myčka v klidu, dálkové ovládání zapnuté): `prepareStatistics` timeout 15 s, po 15 s
+  `getStatistics` timeout 25 s, stav se čte dál normálně. ⇒ Naše myčka statistiky lokálně **neposkytuje**;
+  appka je má jen z cloudu. Údržbu si budeme muset počítat sami (počítat cykly z `http-read`).
 - **Čištění filtru**: každých **100 cyklů** (`filter_maintenance_cycle_limit`), počítáno ze součtu `s*`.
 - **Odvápnění / autoclean**: po N cyklech podle tvrdosti `r7`: `hardness_values` = 110, 105, 100, 95, 90, 85
   (u nás `r7=2` → 100 cyklů). Počítadla „naposledy vyčištěno“ jsou **jen v telefonu**
