@@ -5,7 +5,7 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` · [P11] `pokusy/2026-11-01-ovladac-ostry-test.md` · [P12] `pokusy/2026-11-01-autoclean.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
@@ -86,6 +86,8 @@ Appka čte stav lokálně á 15 s.
 
 - **Filtr**: upozornění každých **100 cyklů** (součet `s1`–`s21` ze statistik).
 - **Odvápnění / autoclean**: po 110/105/100/95/90/85 cyklech podle tvrdosti `r7` (u nás 100).
+- **Čisticí cyklus** = u nás **P2 Intenzivní** s prázdnou myčkou a čističem; appka přidá `w3=H_2`
+  (pak `r9=H_2`) – `w3` neověřeno. 🔍 [P12]
 - „Naposledy vyčištěno“ a tablety si appka pamatuje jen v telefonu.
 
 ## Programy [P4, P5]

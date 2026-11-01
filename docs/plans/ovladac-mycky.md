@@ -41,7 +41,7 @@ Postup: jeden task → ověření → zastávka. Práce ve větvi `feature/ovlad
 ## T6 – ostrý test a nasazení na Linux v Dockeru (později)
 - Ostrý start z UI (P12 → stop) se souhlasem.
 - `Dockerfile` (uv, `uvicorn ovladac.main:app --host 0.0.0.0`), `compose.yaml` (`env_file: .env`,
-  volume pro `DATA_DIR=/data`, `TZ=Europe/Prague`, `restart: unless-stopped`), `docs/nasazeni-linux.md`.
+  volume pro `DATA_DIR=/data`, `TZ=Europe/Prague`, `restart: unless-stopped`), `docs/nasazeni.md`.
 - Do té doby běží ovladač na hlavním Windows PC (`uv run uvicorn …`).
 
 ## Body napojení

@@ -1,0 +1,19 @@
+# Služba ovladače myčky. Samostatně: `docker compose up -d --build` v této složce.
+# Do existujícího compose na serveru: `include: [ cesta/k/netscan_for_candy/compose.yaml ]`
+# (Compose 2.20+), nebo blok `mycka:` zkopírovat do jeho `services:` a upravit cesty.
+services:
+  mycka:
+    build: .
+    container_name: mycka-ovladac
+    restart: unless-stopped
+    # CANDY_IP, CANDY_KEY, DRY_RUN, POLL_SECONDS – viz .env.example
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      TZ: Europe/Prague
+    volumes:
+      # Historie cyklů a údržby – přežije přestavbu kontejneru. Složka musí patřit UID 1000.
+      - ./data:/data
+    ports:
+      # Port na hostiteli si změň vlevo (např. "8090:8000"), když je 8000 obsazený.
+      - "8000:8000"
