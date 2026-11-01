@@ -5,7 +5,7 @@ Aktuální stav poznání – přepisuje se. Legenda: ✅ ověřeno na naší my
 Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statistiky.md` ·
 [P3] `pokusy/2026-11-01-appka-soubeh.md` · [P4] `pokusy/2026-11-01-mapa-programu.md` ·
 [P5] `pokusy/2026-11-01-rozbor-apk-databaze.md` · [P6] `pokusy/2026-11-01-rozbor-apk-kod.md` ·
-[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` ·
+[P7] `pokusy/2026-11-01-rozbor-apk-nautilus.md` · [P8] `pokusy/2026-11-01-prvni-zapis.md` · [P9] `pokusy/2026-11-01-dvirka-odlozeny-start.md` · [P10] `pokusy/2026-11-01-nastaveni.md` ·
 [HA] [Home Assistant Community – Candy simply FI CDI 6015](https://community.home-assistant.io/t/dishwasher-candy-simply-fi-cdi-6015-wifi/136543).
 
 ## Zařízení
@@ -34,9 +34,9 @@ Appka čte stav lokálně á 15 s.
 | Stop / zrušit odložený start ✅ [P8] (stop) | `Reset=1` |
 | ~~Pauza / pokračovat~~ ❌ [P8] | `Pa=1` / `Pa=0` – odpoví SUCCESS, ale nic neudělá |
 | Otevřít dvířka | `OpenDoorOpt=7` |
-| Tvrdost vody | `HL=<0–5>` |
-| Zvuk | `BM=<0/1>` |
-| Pamatovat poslední cyklus | `LC=<0/1>` |
+| Tvrdost vody ✅ [P10] | `HL=<0–5>` → `r7` |
+| Zvuk ✅ [P10] | `BM=<0/1>` → `r6` |
+| Pamatovat poslední cyklus ✅ [P10] | `LC=<0/1>` → `r8` |
 | Kontrola (checkup, ~8 min) / reset kontroly | `StartCheckUp=<n>` / `Write=1` |
 
 - `DelayStart` v příkazu = počet **půlhodin** (0–48); ve stavu se vrací **zbývající minuty** (1 → 30, odpočítává). ✅ [P9]
@@ -63,11 +63,24 @@ Appka čte stav lokálně á 15 s.
 | `MissSalt`, `MissRinse` | chybí sůl / leštidlo (jen příznak, žádná hladina) | 🔍 |
 | `CodiceErrore` | `E<n>`, n > 0 = chyba (číselník v DB appky) | 🔍 |
 | `CheckUp` | kontrola: 0 –, 1 probíhá, 2 hotovo, 3 chyba | 🔍 |
-| `r6` zvuk (`BM`) · `r7` tvrdost vody (`HL`, u nás 2) · `r8` poslední cyklus (`LC`) | nastavení myčky | 🔍 |
+| `r6` zvuk (`BM`) · `r7` tvrdost vody (`HL`, u nás 2) · `r8` poslední cyklus (`LC`) | nastavení uložená v myčce, přežijí restart | ✅ [P10] |
 | `r9` | `H_<cycleId>` = autoclean, jinak `NULL` | 🔍 |
 | `r15` | > 0 = odložení v půlhodinách + checkup | 🔍 |
 | `r5` | 🟡 1 = neběží/připraveno: 1→0 při startu, 0→1 po stopu (v P1 1→0 až v 16. min – log začal po startu) | [P1, P8] |
 | `r3`, `r4`, `Reset` | nepojmenováno | ❓ |
+
+## Tvrdost vody (`HL` = `r7`) 🔍 [P10]
+
+| Index | Appka | °dH | °f | Odvápnění po cyklech |
+|---|---|---|---|---|
+| 0 | Velmi měkká (bez soli) | 0–3 | 0–5 | 110 |
+| 1 | Měkká | 4–9 | 6–15 | 105 |
+| 2 (u nás) | Středně tvrdá | 10–16 | 16–30 | 100 |
+| 3 | Dosti tvrdá | 17–25 | 31–45 | 95 |
+| 4 | Tvrdá | 26–33 | 46–60 | 90 |
+| 5 | Velmi tvrdá | 34–50 | 61–90 | 85 |
+
+(Modely SMOOTH/DIGIT mají 8 stupňů – naše ne.)
 
 ## Údržba (počítá appka, ne myčka) 🔍 [P7]
 
@@ -91,5 +104,5 @@ Appka čte stav lokálně á 15 s.
 
 ## Otevřené otázky
 
-- Ověřit: nastavení `BM`/`HL`/`LC`, programy jen z appky (P9, P16, P17, P20 – neznámé `w1`), volby
+- Ověřit: programy jen z appky (P9, P16, P17, P20 – neznámé `w1`), volby
   (ExtraDry, Eco, ½ náplň, 3v1) ve startu.

@@ -12,6 +12,8 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 - ✅ P8: **lokální zápis funguje** – start P12 a `Reset=1` přes `candy_netscan/send.py`.
 - ✅ P9: dvířka během běhu = pauza (`StatoDWash=4`) a samo pokračuje; odložený start (příkaz v půlhodinách,
   stav v minutách) i jeho zrušení `Reset=1` fungují.
+- ✅ P10: nastavení zvuk `BM`→`r6`, poslední cyklus `LC`→`r8`, tvrdost `HL`→`r7` zápisem fungují
+  a přežijí restart myčky (ztrácí se jen údaje appky/cloudu – údržba, tablety).
 - Sken LAN najde myčku (`candy_netscan`), čtení stavu přes `http-read.json` + XOR klíč (`candy_watch.py`).
 - Pokus P1: celý cyklus P2 zalogován a rozebrán → `docs/pokusy/2026-11-01-cyklus-P2.md`.
 - P2–P4: `getStatistics` nepoužitelný, appka výběr programu neposílá, mapa 5 programů panelu,
@@ -23,7 +25,7 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Další krok
 
-1. Ověřit zbytek (u myčky, se souhlasem): nastavení `BM`/`HL`/`LC`, volby ve startu, programy jen z appky.
+1. Ověřit zbytek (u myčky, se souhlasem): volby ve startu, programy jen z appky.
 2. Vlastní nástroj místo appky (návrh A: Python + jednoduchá webová stránka): stav, start/stop/pauza,
    odložený start „konec v“, počítání cyklů pro údržbu (filtr 100, odvápnění dle `r7`).
 
