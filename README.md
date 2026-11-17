@@ -1,17 +1,16 @@
 # netscan_for_candy – lokální ovládání myčky Candy simply-Fi
 
+🇨🇿 Česky | [🇬🇧 English](README.en.md)
+
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.8%2B%20%7C%20ovlada%C4%8D%203.12%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-web%20UI-009688?logo=fastapi&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
 ![Candy simply-Fi](https://img.shields.io/badge/Candy-simply--Fi-E30613)
 
-> **In English:** Local control of a Candy **simply-Fi** dishwasher – read status, start/stop programs –
-> straight over your LAN, **without the app and without the cloud**. Includes a tool that recovers the
-> module's XOR key, a protocol description and a small web controller (FastAPI). Docs are in Czech, code
-> and CLI are in English. MIT licensed – feel free to reuse it, e.g. for a Home Assistant integration.
-> Quick path: `python -m candy_netscan` (find the IP) → `python -m candy_netscan.find_key <ip>` (get the key)
-> → see [`candy_netscan/client.py`](candy_netscan/client.py) (~70 lines, standard library only).
+> **In English:** local control of a Candy simply-Fi dishwasher over your LAN, without the app and
+> the cloud – tested only on the **Candy CDIN 2L360PB**. Full English README: [README.en.md](README.en.md),
+> step-by-step guide with a protocol summary: [docs/guide.md](docs/guide.md).
 
 Čtení stavu a ovládání myčky Candy s Wi-Fi modulem **simply-Fi** přímo v domácí síti –
 **bez mobilní aplikace a bez cloudu**. Projekt vznikl jako reverzní inženýrství protokolu;
@@ -100,7 +99,7 @@ souběh spojení zasekává Wi-Fi modul. Stav se čte nejvýš 1× za 3 s (vých
 |---|---|
 | `candy_netscan/` | sken sítě, `client.py` (XOR, čtení, zápis – sdílí ho všechno ostatní), `find_key.py`, `candy_watch.py`, `send.py` |
 | `ovladac/` | webový ovladač: `services/` (model stavu, programy, historie), `routers/` (REST API), `static/` (UI) |
-| `docs/navod.md` | návod krok za krokem a řešení problémů |
+| `docs/navod.md` / `docs/guide.md` | návod krok za krokem a řešení problémů (CZ / EN) |
 | `docs/protokol.md` | aktuální mapa protokolu |
 | `docs/pokusy/` | zápisník pokusů, ze kterých poznatky vychází |
 | `docs/specs/` | návrh ovladače |

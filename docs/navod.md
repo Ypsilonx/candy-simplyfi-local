@@ -1,5 +1,7 @@
 # Návod: myčka Candy simply-Fi bez appky a bez cloudu
 
+🇨🇿 Česky | [🇬🇧 English](guide.md)
+
 > ⚠️ **Ověřeno jen na modelu Candy CDIN 2L360PB** (v appce simply-Fi řada *nautilus*).
 > Jiné modely Candy/Hoover se simply-Fi mohou mít jiná pole stavu, kódy programů i příkazy.
 > Čtení stavu je bezpečné vyzkoušet kdekoli; **příkazy (start/stop) na jiném modelu posílej opatrně**

@@ -48,6 +48,8 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
 - Polling ne častěji než 1× za 3 s (modul je ESP, nezahlcovat).
 - Klíč a IP jen v `.env`, nikdy v kódu ani v dokumentaci.
 - Kód zůstává v angličtině (existující moduly jsou anglicky, případně pro sdílení s komunitou); dokumentace česky.
+  Výjimka: anglické `README.en.md` a `docs/guide.md` (vč. souhrnu protokolu) – při změně `README.md`,
+  `docs/navod.md` nebo podstatné změně `docs/protokol.md` je aktualizovat taky.
 - Nástroje v `candy_netscan/` jen standardní knihovna (běh i v Pydroidu). Aplikace `ovladac/` (FastAPI) smí
   mít závislosti přes `uv` – návrh `docs/specs/ovladac-mycky.md`.
 - **Webové UI bez internetu:** žádné CDN, fonty ani externí služby; knihovny jen jako lokální kopie
