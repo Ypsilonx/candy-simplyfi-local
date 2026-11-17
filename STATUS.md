@@ -1,6 +1,6 @@
 # Stav projektu
 
-Aktualizováno: 2026-11-01
+Aktualizováno: 2026-11-17
 
 ## Cíl
 
@@ -30,9 +30,9 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Další krok
 
-1. **Příprava na publikaci** (GitHub): ✅ README (česky + anglický úvod, sekce pro převzetí do HA),
-   ✅ LICENSE (MIT), ✅ kontrola úniků (klíč/IP/MAC v gitu ani historii nejsou),
-   ✅ P13 získání klíče + `candy_netscan/find_key.py` (ověřeno naživo). Zbývá: název repozitáře na GitHubu.
+1. **Příprava na publikaci** (GitHub): ✅ README s badges a upozorněním na model (CDIN 2L360PB),
+   ✅ LICENSE (MIT), ✅ kontrola úniků (klíč/IP/MAC v gitu ani historii nejsou; e-mail v commitech vědomě ponechán),
+   ✅ `docs/navod.md`. Zbývá: anglická verze (`README.en.md` + `docs/guide.md`), pak repo, About a push přes `gh`.
 2. **Vizuál webového UI** – barvy, výraznější styl stránek ovladače (`ovladac/static/css/`).
 3. „Statistiky a údržba v2“ – počáteční stav údržby, učení délek programů z historie, přehled statistik.
 4. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.

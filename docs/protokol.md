@@ -13,6 +13,7 @@ Zdroje: [P1] `pokusy/2026-11-01-cyklus-P2.md` · [P2] `pokusy/2026-11-01-statist
 - Wi-Fi modul na ESP, HTTP port 80, bez autentizace – jen XOR klíčem (16 ASCII znaků). ✅
 - Klíč je pro každý modul jiný; dopočítá se z odpovědi `http-read.json` – plaintext vždy začíná
   `{\r\n\t"statusDWash` (16 B), klíč = šifra ⊕ tento začátek (`candy_netscan/find_key.py`). ✅ [P13]
+- Model: **Candy CDIN 2L360PB** – všechny údaje ✅ platí pro něj, jiné modely se mohou lišit.
 - V appce řada **nautilus/Axi** (ne stará `CandyDishWasher`). ✅ [P7, P8]
 - Ovládání jen v **režimu dálkového ovládání** (Wi-Fi tlačítko, `StatoWiFi=1`); při mačkání panelu ~5 s 0. ✅ [P4]
 

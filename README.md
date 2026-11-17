@@ -17,6 +17,10 @@
 **bez mobilní aplikace a bez cloudu**. Projekt vznikl jako reverzní inženýrství protokolu;
 kromě nástrojů na pokusy obsahuje i webový ovladač, který běží na PC nebo v Dockeru.
 
+> ⚠️ **Ověřeno jen na modelu Candy CDIN 2L360PB** (v appce simply-Fi řada *nautilus*). Jiné modely
+> mohou mít odlišná pole stavu, kódy programů i příkazy – čtení stavu je bezpečné, příkazy zkoušej opatrně
+> a u myčky. Postup krok za krokem: **[`docs/navod.md`](docs/navod.md)**.
+>
 > ⚠️ Neoficiální projekt, s firmou Candy/Haier nemá nic společného. Zápis příkazů do myčky je na vlastní
 > riziko. Endpoint `http-config.json` (přenastavení Wi-Fi a klíče modulu) nástroje záměrně nepoužívají –
 > hrozí ztráta spojení s modulem.
@@ -32,7 +36,7 @@ kromě nástrojů na pokusy obsahuje i webový ovladač, který běží na PC ne
 - **Popis protokolu** v `docs/protokol.md` – endpointy, pole stavu, příkazy, u každého údaje zdroj
   a míra ověření.
 
-Ověřeno na myčce řady *nautilus* (v appce simply-Fi 3.14.1). Jiné modely mohou mít odlišná pole i programy.
+Ověřeno na myčce **Candy CDIN 2L360PB** (v appce simply-Fi 3.14.1 řada *nautilus*). Jiné modely mohou mít odlišná pole i programy.
 
 ## Jak protokol funguje (zkráceně)
 
@@ -96,6 +100,7 @@ souběh spojení zasekává Wi-Fi modul. Stav se čte nejvýš 1× za 3 s (vých
 |---|---|
 | `candy_netscan/` | sken sítě, `client.py` (XOR, čtení, zápis – sdílí ho všechno ostatní), `find_key.py`, `candy_watch.py`, `send.py` |
 | `ovladac/` | webový ovladač: `services/` (model stavu, programy, historie), `routers/` (REST API), `static/` (UI) |
+| `docs/navod.md` | návod krok za krokem a řešení problémů |
 | `docs/protokol.md` | aktuální mapa protokolu |
 | `docs/pokusy/` | zápisník pokusů, ze kterých poznatky vychází |
 | `docs/specs/` | návrh ovladače |
