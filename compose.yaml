@@ -15,5 +15,5 @@ services:
       # Historie cyklů a údržby – přežije přestavbu kontejneru. Složka musí patřit UID 1000.
       - ./data:/data
     ports:
-      # Port na hostiteli si změň vlevo (např. "8090:8000"), když je 8000 obsazený.
-      - "8000:8000"
+      # Port na hostiteli podle registru portů (8103); lze přebít MYCKA_HOST_PORT v .env.
+      - "${MYCKA_HOST_PORT:-8103}:8000"

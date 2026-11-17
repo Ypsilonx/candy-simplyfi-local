@@ -1,6 +1,6 @@
 """FastAPI aplikace ovladače myčky.
 
-Spuštění (vývoj): ``uv run uvicorn ovladac.main:app``; v kontejneru
+Spuštění (vývoj): ``uv run uvicorn ovladac.main:app --port 8103``; v kontejneru
 ``uvicorn ovladac.main:app --host 0.0.0.0``.
 """
 

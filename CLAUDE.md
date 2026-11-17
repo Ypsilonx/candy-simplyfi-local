@@ -19,7 +19,7 @@ Jen standardní knihovna Pythonu 3.8+ (kvůli běhu i na telefonu – Pydroid). 
   `raw "<parametry>"`. Ne `python -I` – vyřadí kořen projektu z importů.
 - Prostředí ovladače: `uv sync`, pak totéž přes `uv run …` (např. `uv run python -m candy_netscan.send start P12`).
   Nástroje v `candy_netscan/` jdou dál spustit i holým `python` bez závislostí.
-- Ovladač: `uv run uvicorn ovladac.main:app` (http://127.0.0.1:8000, výchozí `DRY_RUN=true` – nic neposílá).
+- Ovladač: `uv run uvicorn ovladac.main:app --port 8103` (http://127.0.0.1:8103, výchozí `DRY_RUN=true` – nic neposílá).
   Cílový provoz: Docker na Linux PC – `Dockerfile`, `compose.yaml`, návod `docs/nasazeni.md`.
 - Web UI `ovladac/static/`: vanilla JS bez bundleru, pořadí skriptů závazné – `api.js` (definuje `API_BASE_URL`
   a `api*`) před `app.js`. Po změně CSS/JS zvýšit `?v=` v `index.html` (cache prohlížeče).

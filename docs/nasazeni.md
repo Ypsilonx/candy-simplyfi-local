@@ -9,10 +9,10 @@ simply-Fi nech zavřenou. Souběh spojení zasekává Wi-Fi modul myčky.
 2. Spuštění z kořene projektu:
 
    ```powershell
-   uv run uvicorn ovladac.main:app --host 0.0.0.0 --port 8000
+   uv run uvicorn ovladac.main:app --host 0.0.0.0 --port 8103
    ```
 
-   - PC: http://127.0.0.1:8000, mobil v domácí Wi-Fi: `http://<IP tohoto PC>:8000`
+   - PC: http://127.0.0.1:8103, mobil v domácí Wi-Fi: `http://<IP tohoto PC>:8103`
      (IP zjistíš `ipconfig`). Při prvním spuštění se Windows firewall zeptá – povolit pro **soukromé** sítě.
    - Jen pro PC bez mobilu stačí vynechat `--host 0.0.0.0` (pak firewall neřeší nic).
    - Ukončení Ctrl+C. Historie zůstává v `data/historie.jsonl`, surový log čtení v `data/raw/<datum>.jsonl`.
@@ -34,7 +34,7 @@ Soubory: `Dockerfile`, `compose.yaml`, `.dockerignore` v kořeni projektu.
      ```
      (Compose 2.20+; cesty `build: .` a `./data` se berou relativně ke složce projektu), nebo blok
      `mycka:` zkopírovat do `services:` a `build:`/`volumes:` přepsat na absolutní cesty.
-4. Ověření: `docker compose ps` (stav `healthy`), `docker logs mycka-ovladac`, stránka `http://<server>:8000`.
+4. Ověření: `docker compose ps` (stav `healthy`), `docker logs mycka-ovladac`, stránka `http://<server>:8103`.
 5. Aktualizace: `git pull && docker compose up -d --build`.
 
 ### Na co dát pozor
@@ -42,5 +42,5 @@ Soubory: `Dockerfile`, `compose.yaml`, `.dockerignore` v kořeni projektu.
 - **Časová zóna:** `TZ=Europe/Prague` (už v `compose.yaml`) – „konec v“ a historie se počítají v ní.
   Databázi zón dodává Python balíček `tzdata`; logy uvicornu mohou být v UTC (slim obraz nemá systémová data zón).
 - **Síť:** z výchozí bridge sítě je myčka v LAN dosažitelná napřímo, `network_mode: host` netřeba.
-- **Port:** při kolizi změnit levou stranu `ports` (`"8090:8000"`).
+- **Port:** host port je 8103 podle registru `E:\Dev\PORTS.md`; jiný lze nastavit `MYCKA_HOST_PORT` v `.env`.
 - **Restart:** `restart: unless-stopped`; zastavení (`docker compose down`) korektně ukončí čtení myčky.

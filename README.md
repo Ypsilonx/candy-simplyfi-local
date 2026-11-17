@@ -75,10 +75,10 @@ python -m candy_netscan.send start P12 --send             # ostře
 
 ```bash
 uv sync
-uv run uvicorn ovladac.main:app --host 0.0.0.0 --port 8000
+uv run uvicorn ovladac.main:app --host 0.0.0.0 --port 8103
 ```
 
-Stránka běží na http://127.0.0.1:8000. Výchozí je `DRY_RUN=true` – nic se do myčky neposílá;
+Stránka běží na http://127.0.0.1:8103. Výchozí je `DRY_RUN=true` – nic se do myčky neposílá;
 pro ostrý provoz nastav v `.env` `DRY_RUN=false`. Nasazení v Dockeru: [`docs/nasazeni.md`](docs/nasazeni.md).
 
 **Myčka zvládá jen jednoho klienta** – nespouštěj ovladač dvakrát a appku simply-Fi nech zavřenou,
