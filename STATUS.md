@@ -9,6 +9,8 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Hotovo
 
+- ✅ **Publikováno** na https://github.com/Ypsilonx/candy-simplyfi-local (2026-11-17): README CZ/EN
+  s upozorněním na model CDIN 2L360PB, návod `docs/navod.md` / `docs/guide.md`, MIT, About + topics.
 - ✅ Ovladač (FastAPI + web UI, Docker soubory) mergnutý do `main`; provoz zatím na Windows PC
   (`uv run uvicorn … --host 0.0.0.0`), Docker na Linuxu nesestaven.
 - ✅ Ovladač ukládá surový log čtení (`data/raw/`, jen změny, všechna pole – nic se nefiltruje).
@@ -30,12 +32,9 @@ Hotovo = ze skriptu na PC umím číst stav a spustit/zastavit/nastavit program 
 
 ## Další krok
 
-1. **Příprava na publikaci** (GitHub): ✅ README s badges a upozorněním na model (CDIN 2L360PB),
-   ✅ LICENSE (MIT), ✅ kontrola úniků (klíč/IP/MAC v gitu ani historii nejsou; e-mail v commitech vědomě ponechán),
-   ✅ `docs/navod.md`, ✅ anglicky `README.en.md` + `docs/guide.md`. Zbývá: repo, About a push přes `gh`.
-2. **Vizuál webového UI** – barvy, výraznější styl stránek ovladače (`ovladac/static/css/`).
-3. „Statistiky a údržba v2“ – počáteční stav údržby, učení délek programů z historie, přehled statistik.
-4. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
+1. **Vizuál webového UI** – barvy, výraznější styl stránek ovladače (`ovladac/static/css/`).
+2. „Statistiky a údržba v2“ – počáteční stav údržby, učení délek programů z historie, přehled statistik.
+3. Za provozu doladit: pípání na konci (r6=0 a stejně pípá), délky programů s volbami, programy jen z appky.
 
 ## Otevřené otázky / slepé uličky
 
