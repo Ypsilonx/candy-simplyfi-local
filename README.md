@@ -1,5 +1,11 @@
 # netscan_for_candy – lokální ovládání myčky Candy simply-Fi
 
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.8%2B%20%7C%20ovlada%C4%8D%203.12%2B-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-web%20UI-009688?logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![Candy simply-Fi](https://img.shields.io/badge/Candy-simply--Fi-E30613)
+
 > **In English:** Local control of a Candy **simply-Fi** dishwasher – read status, start/stop programs –
 > straight over your LAN, **without the app and without the cloud**. Includes a tool that recovers the
 > module's XOR key, a protocol description and a small web controller (FastAPI). Docs are in Czech, code
@@ -92,7 +98,7 @@ souběh spojení zasekává Wi-Fi modul. Stav se čte nejvýš 1× za 3 s (vých
 | `ovladac/` | webový ovladač: `services/` (model stavu, programy, historie), `routers/` (REST API), `static/` (UI) |
 | `docs/protokol.md` | aktuální mapa protokolu |
 | `docs/pokusy/` | zápisník pokusů, ze kterých poznatky vychází |
-| `docs/specs/`, `docs/plans/` | návrh a plán ovladače |
+| `docs/specs/` | návrh ovladače |
 | `data/watch/` | surové logy pokusů |
 | `tests/` | testy (`uv run pytest`) |
 

@@ -42,5 +42,5 @@ Soubory: `Dockerfile`, `compose.yaml`, `.dockerignore` v kořeni projektu.
 - **Časová zóna:** `TZ=Europe/Prague` (už v `compose.yaml`) – „konec v“ a historie se počítají v ní.
   Databázi zón dodává Python balíček `tzdata`; logy uvicornu mohou být v UTC (slim obraz nemá systémová data zón).
 - **Síť:** z výchozí bridge sítě je myčka v LAN dosažitelná napřímo, `network_mode: host` netřeba.
-- **Port:** host port je 8103 podle registru `E:\Dev\PORTS.md`; jiný lze nastavit `MYCKA_HOST_PORT` v `.env`.
+- **Port:** výchozí host port je 8103; jiný lze nastavit `MYCKA_HOST_PORT` v `.env`.
 - **Restart:** `restart: unless-stopped`; zastavení (`docker compose down`) korektně ukončí čtení myčky.
